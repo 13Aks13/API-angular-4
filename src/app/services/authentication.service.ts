@@ -14,6 +14,9 @@ export class AuthenticationService {
 
     public token: string;
 
+    // URL to web api
+    private authenticateUrl = 'http://ws.dev/authenticate';
+
     constructor(private http: Http) {
         // set token if saved in local storage
         let currentUser = JSON.parse(localStorage.getItem('currentUser'));
@@ -22,19 +25,19 @@ export class AuthenticationService {
 
 
     login(email: string, password: string): Promise<any> {
-        console.log(email);
-        console.log(password);
-        let url = 'http://ws.dev/authenticate';
+
+        let url = `${this.authenticateUrl}`;
 
         return this.http.post(url, JSON.stringify({email: email, password: password}))
             .toPromise()
             .then(response => {
                 let token = JSON.parse(response.text()).token;
+                let id = JSON.parse(response.text()).user.id;
                 if (token) {
                     // set token property
                     this.token = token;
                     // store username and jwt token in local storage to keep user logged in between page refreshes
-                    localStorage.setItem('currentUser', JSON.stringify({email: email, token: token}));
+                    localStorage.setItem('currentUser', JSON.stringify({ email: email, token: token, id: id }));
                     // get token true
                     return true;
                 } else {
