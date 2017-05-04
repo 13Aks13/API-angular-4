@@ -1,23 +1,18 @@
 /**
- * Created by adreik on 28.04.17.
+ * Created by Andrew K. on 04.05.17.
+ *
  */
-import { Component } from '@angular/core';
+
+import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
 
-@Component({
-    selector: 'login-app',
-    templateUrl: './login.component.html',
-    styleUrls: [ './login.component.css' ]
 
-})
+@Injectable()
+export class AuthenticationService {
 
-export class LoginComponent {
-//    private headers = new Headers({ 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': 'http://localhost:3000' });
     public token: string;
-    public email: string;
-    public password: string;
 
     constructor(private http: Http) {
         // set token if saved in local storage
@@ -26,27 +21,31 @@ export class LoginComponent {
     }
 
 
-     login(): Promise<any> {
-        console.log(this.email);
-        console.log(this.password);
+    login(email: string, password: string): Promise<any> {
+        console.log(email);
+        console.log(password);
         let url = 'http://ws.dev/authenticate';
 
-        return this.http.post(url, JSON.stringify({email: this.email, password: this.password}))
+        return this.http.post(url, JSON.stringify({email: email, password: password}))
             .toPromise()
-            .then(res => {
-                let token = JSON.parse(res.text()).token;
+            .then(response => {
+                let token = JSON.parse(response.text()).token;
                 if (token) {
                     // set token property
                     this.token = token;
                     // store username and jwt token in local storage to keep user logged in between page refreshes
-                    localStorage.setItem('currentUser', JSON.stringify({email: this.email, token: token}));
+                    localStorage.setItem('currentUser', JSON.stringify({email: email, token: token}));
+                    // get token true
+                    return true;
+                } else {
+                    return false;
                 }
             })
             .catch(this.handleError);
     };
 
     private handleError(error: any): Promise<any> {
-        console.error('An error occurred', error); // for demo purposes only
+        console.error('An error occurred', error);
         return Promise.reject(error.message || error);
     }
 
