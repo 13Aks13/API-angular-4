@@ -16,6 +16,7 @@ export class UserService {
     // URL to web api
     private userUrl = 'http://ws.dev/users';
 
+
     constructor(
         private http: Http,
         private authenticationService: AuthenticationService) {
@@ -45,6 +46,14 @@ export class UserService {
             .toPromise()
             .then(response => response.json().data as User[])
             .catch(this.handleError);
+    }
+
+    statusOnline(): Promise<boolean> {
+        // add authorization header with jwt token
+        let headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token });
+        let options = new RequestOptions({ headers: headers });
+        const url = `${this.userUrl}`;
+
     }
 
     private handleError(error: any): Promise<any> {

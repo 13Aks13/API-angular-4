@@ -25,18 +25,13 @@ export class HomeComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        // get users from secure api end point
-        // this.userService.getUsers()
-        //     .then(users => this.users = users );
+
+
 
         let id  = JSON.parse(localStorage.getItem('currentUser')).id;
 
         this.userService.getUser(id)
             .then(user => this.user = user);
-
-        // this.route.params
-        //     .switchMap((params: Params) => this.userService.getUser(+params['id']))
-        //     .subscribe(user => this.user = user);
     }
 
 }
