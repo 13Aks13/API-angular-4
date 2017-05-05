@@ -6,6 +6,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 
 import { User } from '../models/user';
+import { UserStatuses } from '../models/userstatuses';
 import { UserService } from '../services/user.service';
 import 'rxjs/add/operator/switchMap';
 
@@ -17,7 +18,10 @@ import 'rxjs/add/operator/switchMap';
 
 export class HomeComponent implements OnInit {
     user: User;
-    users: User[] = [];
+//    users: User[] = [];
+
+//    userstatus: UserStatuses;
+    userstatuses: UserStatuses[] = [];
 
     constructor(
         private userService: UserService,
@@ -26,12 +30,21 @@ export class HomeComponent implements OnInit {
 
     ngOnInit() {
 
+        // Get user statuses
+        this.userService.getUserStatuses()
+            .then(userstatuses => this.userstatuses = userstatuses);
 
+        // User ID
+        let id = JSON.parse(localStorage.getItem('currentUser')).id;
 
-        let id  = JSON.parse(localStorage.getItem('currentUser')).id;
+        // Set user status
+        console.log(this.userstatuses);
+        // this.userService.setUserStatusOnline()
 
+        // Get user data
         this.userService.getUser(id)
             .then(user => this.user = user);
+
     }
 
 }

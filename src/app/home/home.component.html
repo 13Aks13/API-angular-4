@@ -34,7 +34,7 @@
 </nav>
 
 <div class="row">
-    <div class="col-md-5">
+    <div class="col-md-3">
         <div class="list-group">
             <button type="button"  class="list-group-item">Dasboard</button>
             <button type="button"  class="list-group-item">Schedule</button>
@@ -49,7 +49,7 @@
     </div>
     <div class="col-md-5">
         <ul>
-            <li *ngFor="let user of users">{{user.name}} {{user.email}} {{user.status.name}}</li>
+            <li *ngFor="let userstatus of userstatuses">{{userstatus.status}} {{userstatus.status_color}}</li>
         </ul>
     </div>
 </div>
