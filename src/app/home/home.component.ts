@@ -28,6 +28,7 @@ export class HomeComponent implements OnInit {
         // get users from secure api end point
         // this.userService.getUsers()
         //     .then(users => this.users = users );
+
         let id  = JSON.parse(localStorage.getItem('currentUser')).id;
 
         this.userService.getUser(id)

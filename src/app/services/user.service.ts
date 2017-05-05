@@ -26,6 +26,8 @@ export class UserService {
         let headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token });
         let options = new RequestOptions({ headers: headers });
         const url = `${this.userUrl}/${id}`;
+
+        // get user by id
         return this.http.get(url, options)
             .toPromise()
             .then(response => response.json().data as User)
@@ -37,6 +39,7 @@ export class UserService {
         let headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token });
         let options = new RequestOptions({ headers: headers });
         const url = `${this.userUrl}`;
+
         // get users from api
         return this.http.get(url, options)
             .toPromise()

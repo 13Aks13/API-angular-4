@@ -8,7 +8,12 @@
             </div>
             <ul class="nav navbar-nav">
                 <li>
-                    <div class="form-group" *ngFor="let user of users">{{user.name}} {{user.email}} {{user.status}}></div>
+                    <div class="form-group" *ngIf="user">
+                        <label>Status</label>
+                        {{user.status.name}}
+                        <label>Active user: </label>
+                        {{user.name}} {{user.email}}
+                    </div>
                 </li>
                 <li>
                     <div class="button-logout">
@@ -34,6 +39,8 @@
 
     </div>
     <div class="col-md-5">
-
+        <ul>
+            <li *ngFor="let user of users">{{user.name}} {{user.email}} {{user.status.name}}</li>
+        </ul>
     </div>
 </div>

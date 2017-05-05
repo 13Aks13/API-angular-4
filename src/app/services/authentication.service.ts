@@ -15,7 +15,7 @@ export class AuthenticationService {
     public token: string;
 
     // URL to web api
-    private authenticateUrl = 'http://ws.dev/authenticate';
+    private loginUrl = 'http://ws.dev/login';
 
     constructor(private http: Http) {
         // set token if saved in local storage
@@ -26,7 +26,7 @@ export class AuthenticationService {
 
     login(email: string, password: string): Promise<any> {
 
-        let url = `${this.authenticateUrl}`;
+        let url = `${this.loginUrl}`;
 
         return this.http.post(url, JSON.stringify({email: email, password: password}))
             .toPromise()
@@ -47,16 +47,14 @@ export class AuthenticationService {
             .catch(this.handleError);
     };
 
-    private handleError(error: any): Promise<any> {
-        console.error('An error occurred', error);
-        return Promise.reject(error.message || error);
-    }
-
-
     logout(): void {
         // clear token remove user from local storage to log user out
         this.token = null;
         localStorage.removeItem('currentUser');
     }
 
+    private handleError(error: any): Promise<any> {
+        console.error('An error occurred', error);
+        return Promise.reject(error.message || error);
+    }
 }
