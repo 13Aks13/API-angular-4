@@ -48,13 +48,17 @@ export class UserService {
             .catch(this.handleError);
     }
 
-    statusOnline(): Promise<boolean> {
-        // add authorization header with jwt token
-        let headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token });
-        let options = new RequestOptions({ headers: headers });
-        const url = `${this.userUrl}`;
-
-    }
+    // statusOnline(): Promise<boolean> {
+    //     // add authorization header with jwt token
+    //     let headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token });
+    //     let options = new RequestOptions({ headers: headers });
+    //     const url = `${this.userUrl}`;
+    //
+    //     return this.http.put(url, options)
+    //         .toPromise()
+    //         .then()
+    //         .catch(this.handleError);
+    // }
 
     private handleError(error: any): Promise<any> {
         console.error('An error occurred', error);
