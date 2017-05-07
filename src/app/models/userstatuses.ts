@@ -4,6 +4,6 @@
 
 export class UserStatuses {
     id: any;
-    status: string;
+    status_name: string;
     status_color: string;
 }

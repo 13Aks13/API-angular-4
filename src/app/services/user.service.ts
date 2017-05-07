@@ -17,7 +17,7 @@ export class UserService {
     // URL to web api
     private domain = 'http://ws.dev/';
     private userUrl = 'users';
-    private tokenValidate = 'validate_token';
+//    private tokenValidate = 'validate_token';
 
     constructor(
         private http: Http,
@@ -68,20 +68,6 @@ export class UserService {
             .catch(this.handleError);
     }
 
-
-    // checkToken(): Promise<any> {
-    //     let headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token });
-    //     let options = new RequestOptions({ headers: headers });
-    //     const url = `${this.tokenValidate}`;
-    //
-    //     return this.http.get(url, options)
-    //         .toPromise()
-    //         .then(response => {
-    //             console.log(response.json());
-    //             return true;
-    //         })
-    //         .catch(this.handleError);
-    // }
 
     setUserStatusOnline(id: number): Promise<any> {
         let headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token });
