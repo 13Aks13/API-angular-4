@@ -3,11 +3,16 @@
  */
 
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 import { User } from '../models/user';
+import { UserStatus } from '../models/UserStatus';
 import { UserStatuses } from '../models/userstatuses';
+
+
 import { UserService } from '../services/user.service';
+
+
 import 'rxjs/add/operator/switchMap';
 
 
@@ -18,9 +23,10 @@ import 'rxjs/add/operator/switchMap';
 })
 export class HomeComponent implements OnInit {
     user: User;
-    users: User[] = [];
+//    users: User[] = [];
 
-//  userstatus: UserStatuses;
+    us: UserStatus;
+
     userstatuses: UserStatuses[] = [];
 
     selectedStatuses: UserStatuses;
@@ -44,6 +50,17 @@ export class HomeComponent implements OnInit {
             .then(userstatuses => this.userstatuses = userstatuses);
     }
 
+    setCurrentUserStatus(): void {
+        this.userService.setUserStatus(this.user.id, this.selectedStatuses.status_id)
+            .then(us => this.us = us);
+    }
+
+    getCurrentUserStatus(): void {
+        this.userService.getUserStatus(this.user.id)
+            .then(us => this.us = us);
+
+        console.log(this.us);
+    }
 
     ngOnInit() {
         // Get user statuses
@@ -51,17 +68,13 @@ export class HomeComponent implements OnInit {
 
         // User ID
         let id = JSON.parse(localStorage.getItem('currentUser')).id;
-
         this.getUser(id);
     }
 
     onSelect(userstatus: UserStatuses): void {
-        console.log(userstatus);
         this.selectedStatuses = userstatus;
+        this.setCurrentUserStatus();
+        this.getCurrentUserStatus();
     }
 
-    // setStatus(): void {
-    //     console.log('User:' + this.user.id );
-    //     console.log('Status:' + this.selectedStatuses.status_id);
-    // }
 }

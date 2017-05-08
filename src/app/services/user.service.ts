@@ -9,7 +9,9 @@ import 'rxjs/add/operator/toPromise';
 
 import { AuthenticationService } from './authentication.service';
 import { User } from '../models/user';
+import { UserStatus } from '../models/UserStatus';
 import { UserStatuses } from '../models/userstatuses';
+
 
 @Injectable()
 export class UserService {
@@ -17,7 +19,8 @@ export class UserService {
     // URL to web api
     private domain = 'http://ws.dev/';
     private userUrl = 'users';
-//    private tokenValidate = 'validate_token';
+    private statusUrl = 'changestatus';
+
 
     constructor(
         private http: Http,
@@ -68,42 +71,29 @@ export class UserService {
             .catch(this.handleError);
     }
 
-    saveUserStatusChanging(user_id: number, status_id: number): Promise<any> {
-        let headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token,
-                                    user_id: user_id, status_id: status_id });
+    setUserStatus(user_id: number, status_id: number): Promise<UserStatus> {
+        let headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token });
         let options = new RequestOptions({ headers: headers });
-        const url = `${this.domain}changestatus`;
+        const url = `${this.domain}${this.statusUrl}`;
 
-        // save new user status to db
-        return this.http.post(url, options)
+         // set user statuses for api
+        return this.http.post(url, { user_id: user_id, status_id: status_id }, options)
             .toPromise()
-            .then(response => {
-                console.log( response.json() );
-                return true;
-            })
+            .then(response => response.json() as UserStatus)
             .catch(this.handleError);
     }
 
-
-    setUserStatus(user_id: number, status_id: number): Promise<any> {
-        console.log(user_id);
-        console.log(status_id);
-        let headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token, 'status_id': status_id });
+    getUserStatus(user_id: number): Promise<UserStatus> {
+        let headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token });
         let options = new RequestOptions({ headers: headers });
-        const url = `${this.domain}status`;
+        const url = `${this.domain}${this.statusUrl}/${user_id}`;
 
         // set user statuses for api
-        return this.http.post(url, options)
+        return this.http.get(url, options)
             .toPromise()
-            .then(response => {
-                console.log(response.json());
-                return true;
-            })
+            .then(response => response.json().data as UserStatus)
             .catch(this.handleError);
-
     }
-
-
 
 
 }
