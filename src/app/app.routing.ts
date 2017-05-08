@@ -1,14 +1,15 @@
 /**
- * Created by adreik on 04.05.17.
+ * Created by Andrew K. on 04.05.17.
  */
 
+import { NgModule }             from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { LoginComponent } from './login/login.component';
 import { HomeComponent } from './home/home.component';
 import { AuthGuard } from './services/auth.guard';
 
-const appRoutes: Routes = [
+const routes: Routes = [
     { path: 'login', component: LoginComponent },
     { path: '', component: HomeComponent, canActivate: [AuthGuard] },
 
@@ -16,4 +17,8 @@ const appRoutes: Routes = [
     { path: '**', redirectTo: '' }
 ];
 
-export const routing = RouterModule.forRoot(appRoutes);
+@NgModule({
+    imports: [ RouterModule.forRoot(routes) ],
+    exports: [ RouterModule ]
+})
+export class AppRoutingModule {}

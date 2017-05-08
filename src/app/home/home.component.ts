@@ -38,7 +38,7 @@ export class HomeComponent implements OnInit {
         let id = JSON.parse(localStorage.getItem('currentUser')).id;
 
         // Set user status
-        console.log(this.userstatuses);
+        // console.log(this.userstatuses);
         // this.userService.setUserStatusOnline()
 
         // Get user data

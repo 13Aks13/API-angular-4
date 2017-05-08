@@ -74,7 +74,7 @@ export class UserService {
         let options = new RequestOptions({ headers: headers });
         const url = `${this.domain}status`;
 
-        // get user statuses from api
+        // set user statuses for api
         return this.http.post(url, options)
             .toPromise()
             .then(response => {

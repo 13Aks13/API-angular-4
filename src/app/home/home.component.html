@@ -45,12 +45,14 @@
         </div>
     </div>
     <div class="col-md-2">
-
+        <ul>
+            <li *ngFor="let userstatus of userstatuses">{{userstatus.status_color}}
+                <button type="button" class="btn btn-default">{{userstatus.status_name}}</button>
+            </li>
+        </ul>
     </div>
     <div class="col-md-5">
-        <ul>
-            <li *ngFor="let userstatus of userstatuses">{{userstatus.status_name}} {{userstatus.status_color}}</li>
-        </ul>
+
     </div>
 </div>
 
