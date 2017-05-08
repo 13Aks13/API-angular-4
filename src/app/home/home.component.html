@@ -45,9 +45,11 @@
         </div>
     </div>
     <div class="col-md-2">
-        <ul>
-            <li *ngFor="let userstatus of userstatuses">{{userstatus.status_color}}
-                <button type="button" class="btn btn-default">{{userstatus.status_name}}</button>
+        <ul class="statuses-group">
+            <li *ngFor="let userstatus of userstatuses" (click)="onSelect(userstatus)"
+                 [class.selected]="userstatus === selectedStatuses">
+                 <span class="badge">{{userstatus.status_id}}</span>
+                 <span>{{userstatus.status_name}}</span>
             </li>
         </ul>
     </div>
@@ -55,5 +57,8 @@
 
     </div>
 </div>
+
+
+
 
 

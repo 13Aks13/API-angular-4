@@ -68,13 +68,13 @@ export class UserService {
             .catch(this.handleError);
     }
 
-
-    setUserStatusOnline(id: number): Promise<any> {
-        let headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token });
+    saveUserStatusChanging(user_id: number, status_id: number): Promise<any> {
+        let headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token,
+                                    user_id: user_id, status_id: status_id });
         let options = new RequestOptions({ headers: headers });
-        const url = `${this.domain}status`;
+        const url = `${this.domain}changestatus`;
 
-        // set user statuses for api
+        // save new user status to db
         return this.http.post(url, options)
             .toPromise()
             .then(response => {
@@ -83,6 +83,27 @@ export class UserService {
             })
             .catch(this.handleError);
     }
+
+
+    setUserStatus(user_id: number, status_id: number): Promise<any> {
+        console.log(user_id);
+        console.log(status_id);
+        let headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token, 'status_id': status_id });
+        let options = new RequestOptions({ headers: headers });
+        const url = `${this.domain}status`;
+
+        // set user statuses for api
+        return this.http.post(url, options)
+            .toPromise()
+            .then(response => {
+                console.log(response.json());
+                return true;
+            })
+            .catch(this.handleError);
+
+    }
+
+
 
 
 }

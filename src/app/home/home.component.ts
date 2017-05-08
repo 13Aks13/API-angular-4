@@ -3,7 +3,7 @@
  */
 
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { User } from '../models/user';
 import { UserStatuses } from '../models/userstatuses';
@@ -13,38 +13,55 @@ import 'rxjs/add/operator/switchMap';
 
 @Component({
     moduleId: module.id,
-    templateUrl: 'home.component.html'
+    templateUrl: './home.component.html',
+    styleUrls: [ './home.component.css' ]
 })
-
 export class HomeComponent implements OnInit {
     user: User;
-//    users: User[] = [];
+    users: User[] = [];
 
-//    userstatus: UserStatuses;
+//  userstatus: UserStatuses;
     userstatuses: UserStatuses[] = [];
+
+    selectedStatuses: UserStatuses;
 
     constructor(
         private userService: UserService,
         private route: ActivatedRoute,
     ) { }
 
-    ngOnInit() {
+    // Get User by ID
+    getUser(id: number): void {
+        // Get user data
+        this.userService.getUser(id)
+            .then(user => this.user = user);
+    }
 
-        // Get user statuses
+    // Get user statuses
+    getUsersStatuses(): void {
+
         this.userService.getUserStatuses()
             .then(userstatuses => this.userstatuses = userstatuses);
+    }
+
+
+    ngOnInit() {
+        // Get user statuses
+        this.getUsersStatuses();
 
         // User ID
         let id = JSON.parse(localStorage.getItem('currentUser')).id;
 
-        // Set user status
-        // console.log(this.userstatuses);
-        // this.userService.setUserStatusOnline()
-
-        // Get user data
-        this.userService.getUser(id)
-            .then(user => this.user = user);
-
+        this.getUser(id);
     }
 
+    onSelect(userstatus: UserStatuses): void {
+        console.log(userstatus);
+        this.selectedStatuses = userstatus;
+    }
+
+    // setStatus(): void {
+    //     console.log('User:' + this.user.id );
+    //     console.log('Status:' + this.selectedStatuses.status_id);
+    // }
 }

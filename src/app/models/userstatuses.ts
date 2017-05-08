@@ -3,7 +3,7 @@
  */
 
 export class UserStatuses {
-    id: any;
+    status_id: any;
     status_name: string;
     status_color: string;
 }
