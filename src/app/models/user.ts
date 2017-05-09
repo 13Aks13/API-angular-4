@@ -4,7 +4,6 @@ export class User {
     email: string;
     password: string;
     status: string;
-    status_color: string;
     today: any;
     brake: any;
     lunche: any;

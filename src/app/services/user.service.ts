@@ -19,7 +19,8 @@ export class UserService {
     // URL to web api
     private domain = 'http://ws.dev/';
     private userUrl = 'users';
-    private statusUrl = 'changestatus';
+    private statusUrl = 'status';
+    private statusesUrl = 'statuses';
 
 
     constructor(
@@ -62,7 +63,7 @@ export class UserService {
         // add authorization header with jwt token
         let headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token });
         let options = new RequestOptions({ headers: headers });
-        const url = `${this.domain}statuses`;
+        const url = `${this.domain}${this.statusesUrl}`;
 
         // get user statuses from api
         return this.http.get(url, options)
@@ -79,21 +80,8 @@ export class UserService {
          // set user statuses for api
         return this.http.post(url, { user_id: user_id, status_id: status_id }, options)
             .toPromise()
-            .then(response => response.json() as UserStatus)
+            .then(response => response.json().user as UserStatus)
             .catch(this.handleError);
     }
-
-    getUserStatus(user_id: number): Promise<UserStatus> {
-        let headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token });
-        let options = new RequestOptions({ headers: headers });
-        const url = `${this.domain}${this.statusUrl}/${user_id}`;
-
-        // set user statuses for api
-        return this.http.get(url, options)
-            .toPromise()
-            .then(response => response.json().data as UserStatus)
-            .catch(this.handleError);
-    }
-
 
 }

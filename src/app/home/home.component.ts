@@ -38,14 +38,12 @@ export class HomeComponent implements OnInit {
 
     // Get User by ID
     getUser(id: number): void {
-        // Get user data
         this.userService.getUser(id)
             .then(user => this.user = user);
     }
 
     // Get user statuses
     getUsersStatuses(): void {
-
         this.userService.getUserStatuses()
             .then(userstatuses => this.userstatuses = userstatuses);
     }
@@ -53,13 +51,6 @@ export class HomeComponent implements OnInit {
     setCurrentUserStatus(): void {
         this.userService.setUserStatus(this.user.id, this.selectedStatuses.status_id)
             .then(us => this.us = us);
-    }
-
-    getCurrentUserStatus(): void {
-        this.userService.getUserStatus(this.user.id)
-            .then(us => this.us = us);
-
-        console.log(this.us);
     }
 
     ngOnInit() {
@@ -74,7 +65,8 @@ export class HomeComponent implements OnInit {
     onSelect(userstatus: UserStatuses): void {
         this.selectedStatuses = userstatus;
         this.setCurrentUserStatus();
-        this.getCurrentUserStatus();
+        let id = JSON.parse(localStorage.getItem('currentUser')).id;
+        this.getUser(id);
     }
 
 }

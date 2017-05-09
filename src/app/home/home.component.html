@@ -16,14 +16,17 @@
             <ul class="nav navbar-nav">
 
             </ul>
-            <form class="navbar-form navbar-left">
-                <div class="form-group" *ngIf="user">
-                    <label>Status</label>
-                    {{user.status.name}}
-                    <label>Active user: </label>
-                    {{user.name}} {{user.email}}
-                </div>
-            </form>
+            <ul>
+                <form class="navbar-form navbar-left">
+                    <div class="form-group" *ngIf="user">
+                        <label>Active user: </label>
+                        {{user.name}} {{user.email}}
+                        <label>Status</label>
+                        <span class="badge">{{user.status.id}}</span>
+                        <span>{{user.status.name}}</span>
+                    </div>
+                </form>
+            </ul>
             <ul class="nav navbar-nav navbar-right">
                 <div class="form-group">
                     <a [routerLink]="['/login']" class="btn btn-primary btn-lg" role="button">Logout</a>
