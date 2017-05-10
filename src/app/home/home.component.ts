@@ -69,7 +69,8 @@ export class HomeComponent implements OnInit {
                 // to do -> to underscore
                 for (let i = 0; i < this.userstatuses.length; i++) {
                     if (this.userstatuses[i].status_id === this.statistics.status_id) {
-                        this.statistics.status_name =  this.userstatuses[i].status_name
+                        this.statistics.status_name =  this.userstatuses[i].status_name;
+                        break;
                     };
                 }
                 // User ID
