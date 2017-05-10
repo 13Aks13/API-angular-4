@@ -6,13 +6,14 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { User } from '../models/user';
-import { UserStatus } from '../models/UserStatus';
+import { Statistics } from '../models/statistics';
 import { UserStatuses } from '../models/userstatuses';
 
 
 import { UserService } from '../services/user.service';
 
-
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/switchMap';
 
 
@@ -23,10 +24,9 @@ import 'rxjs/add/operator/switchMap';
 })
 export class HomeComponent implements OnInit {
     user: User;
-//    users: User[] = [];
-
-    us: UserStatus;
-
+    users: User[] = [];
+    statistics: Statistics;
+//    statisticses: Statistics[] = [];
     userstatuses: UserStatuses[] = [];
 
     selectedStatuses: UserStatuses;
@@ -43,29 +43,49 @@ export class HomeComponent implements OnInit {
     }
 
     // Get user statuses
-    getUsersStatuses(): void {
-        this.userService.getUserStatuses()
+    getStatuses(): any {
+        return this.userService.getStatuses()
             .then(userstatuses => this.userstatuses = userstatuses);
     }
 
-    setCurrentUserStatus(): void {
-        this.userService.setUserStatus(this.user.id, this.selectedStatuses.status_id)
-            .then(us => this.us = us);
+    getCurrentUserStatus(id: number): any {
+        return this.userService.getCurrentUserStatus(id)
+            .then(statistics => this.statistics = statistics);
+    }
+
+    setCurrentUserStatus(): any {
+        return this.userService.setCurrentUserStatus(this.user.id, this.selectedStatuses.status_id)
+            .then(statistics => this.statistics = statistics);
     }
 
     ngOnInit() {
         // Get user statuses
-        this.getUsersStatuses();
+        this.getStatuses().then(() => {
+            console.log(this.userstatuses);
+            // User Id
+            let id = JSON.parse(localStorage.getItem('currentUser')).id;
+            // Current status
+            this.getCurrentUserStatus(id).then(() => {
+                // to do -> to underscore
+                for (let i = 0; i < this.userstatuses.length; i++) {
+                    if (this.userstatuses[i].status_id === this.statistics.status_id) {
+                        this.statistics.status_name =  this.userstatuses[i].status_name
+                    };
+                }
+                // User ID
+                this.getUser(id);
+            });
+        });
 
-        // User ID
-        let id = JSON.parse(localStorage.getItem('currentUser')).id;
-        this.getUser(id);
     }
 
     onSelect(userstatus: UserStatuses): void {
-        this.selectedStatuses = userstatus;
-        this.setCurrentUserStatus();
         let id = JSON.parse(localStorage.getItem('currentUser')).id;
+        this.selectedStatuses = userstatus;
+        this.setCurrentUserStatus().then(() => {
+            console.log(this.statistics.status_id);
+        });
+        this.getCurrentUserStatus(id);
         this.getUser(id);
     }
 

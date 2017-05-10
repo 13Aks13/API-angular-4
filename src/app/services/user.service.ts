@@ -9,7 +9,7 @@ import 'rxjs/add/operator/toPromise';
 
 import { AuthenticationService } from './authentication.service';
 import { User } from '../models/user';
-import { UserStatus } from '../models/UserStatus';
+import { Statistics } from '../models/statistics';
 import { UserStatuses } from '../models/userstatuses';
 
 
@@ -18,6 +18,7 @@ export class UserService {
 
     // URL to web api
     private domain = 'http://ws.dev/';
+    // private domain = 'http://wsapi.test-y-sbm.com/';
     private userUrl = 'users';
     private statusUrl = 'status';
     private statusesUrl = 'statuses';
@@ -59,7 +60,7 @@ export class UserService {
             .catch(this.handleError);
     }
 
-    getUserStatuses(): Promise<UserStatuses[]> {
+    getStatuses(): Promise<UserStatuses[]> {
         // add authorization header with jwt token
         let headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token });
         let options = new RequestOptions({ headers: headers });
@@ -72,15 +73,29 @@ export class UserService {
             .catch(this.handleError);
     }
 
-    setUserStatus(user_id: number, status_id: number): Promise<UserStatus> {
+    getCurrentUserStatus(user_id: number): Promise<Statistics> {
+        // add authorization header with jwt token
+        let headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token });
+        let options = new RequestOptions({ headers: headers });
+        const url = `${this.domain}${this.statusUrl}?user_id=${user_id}` ;
+
+        // get user current status from Statistic
+        return this.http.get(url, options)
+            .toPromise()
+            .then(response => response.json().data as Statistics)
+            .catch(this.handleError);
+    }
+
+    setCurrentUserStatus(user_id: number, status_id: number): Promise<Statistics> {
         let headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token });
         let options = new RequestOptions({ headers: headers });
         const url = `${this.domain}${this.statusUrl}`;
 
-         // set user statuses for api
+
+        // set user statuses for api
         return this.http.post(url, { user_id: user_id, status_id: status_id }, options)
             .toPromise()
-            .then(response => response.json().user as UserStatus)
+            .then(response => response.json().data as Statistics)
             .catch(this.handleError);
     }
 

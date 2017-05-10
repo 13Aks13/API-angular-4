@@ -21,9 +21,11 @@
                     <div class="form-group" *ngIf="user">
                         <label>Active user: </label>
                         {{user.name}} {{user.email}}
+                    </div>
+                    <div  class="form-group" *ngIf="statistics">
                         <label>Status</label>
-                        <span class="badge">{{user.status.id}}</span>
-                        <span>{{user.status.name}}</span>
+                        <span class="badge">{{statistics.status_id}}</span>
+                        <span>{{statistics.status_name}}</span>
                     </div>
                 </form>
             </ul>

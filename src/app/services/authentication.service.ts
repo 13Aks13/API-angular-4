@@ -15,7 +15,9 @@ export class AuthenticationService {
     public token: string;
 
     // URL to web api
-    private loginUrl = 'http://ws.dev/login';
+    private domain = 'http://ws.dev/';
+    // private domain = 'http://wsapi.test-y-sbm.com/';
+    private loginUrl = 'login';
 
     constructor(private http: Http) {
         // set token if saved in local storage
@@ -26,7 +28,7 @@ export class AuthenticationService {
 
     login(email: string, password: string): Promise<any> {
 
-        let url = `${this.loginUrl}`;
+        let url = `${this.domain}${this.loginUrl}`;
 
         return this.http.post(url, JSON.stringify({email: email, password: password}))
             .toPromise()
