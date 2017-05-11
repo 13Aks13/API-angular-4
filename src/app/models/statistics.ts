@@ -4,10 +4,10 @@
 
 export class Statistics {
     id: any;
-    user_id: string;
-    status_id: string;
+    user_id: any;
+    status_id: any;
     status_name: string;
-    seconds: string;
+    seconds: any;
     added: string;
 }
 

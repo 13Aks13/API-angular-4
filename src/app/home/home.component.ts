@@ -15,6 +15,7 @@ import { UserService } from '../services/user.service';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/switchMap';
+import {forEach} from "@angular/router/src/utils/collection";
 
 
 @Component({
@@ -30,6 +31,10 @@ export class HomeComponent implements OnInit {
     userstatuses: UserStatuses[] = [];
 
     selectedStatuses: UserStatuses;
+
+    private Interval: any;
+    private statusID: any;
+    private staTime: any;
 
     constructor(
         private userService: UserService,
@@ -58,34 +63,69 @@ export class HomeComponent implements OnInit {
             .then(statistics => this.statistics = statistics);
     }
 
+    updCurrentUserStatus(user_id: number, status_id: number): any {
+        return this.userService.updCurrentUserStatus(user_id, status_id)
+            .then(statistics => this.statistics = statistics);
+    }
+
+    getTime(user_id: number, status_id: number): any {
+        return this.userService.getTime(user_id, status_id)
+            .then(staTime => this.staTime = staTime);
+    }
+
     ngOnInit() {
+        // User Id
+        let id = JSON.parse(localStorage.getItem('currentUser')).id;
+
         // Get user statuses
         this.getStatuses().then(() => {
-            // User Id
-            let id = JSON.parse(localStorage.getItem('currentUser')).id;
+            // Get user by ID
+            this.getUser(id);
             // Current status
             this.getCurrentUserStatus(id).then(() => {
                 // Fast filter for array
-                let st = this.statistics.status_id;
+                this.statusID = this.statistics.status_id;
+                let st = this.statusID;
                 this.statistics.status_name = this.userstatuses.filter(function(obj) {
                      return obj.status_id === st;
                 })[0].status_name;
 
-                // User ID
-                this.getUser(id);
+                // Start update user status every X interval
+                this.Interval = setInterval(() => {
+
+                    for
+
+                    this.updCurrentUserStatus(id, this.statusID);
+                }, 20000);
             });
         });
+    }
 
+    ngOnDestroy() {
+    //    clearInterval();
     }
 
     onSelect(userstatus: UserStatuses): void {
         let id = JSON.parse(localStorage.getItem('currentUser')).id;
         this.selectedStatuses = userstatus;
         this.setCurrentUserStatus().then(() => {
-            console.log(this.statistics.status_id);
+            clearInterval(this.Interval);
+            this.getCurrentUserStatus(id).then(() => {
+                // Fast filter for array
+                this.statusID = this.statistics.status_id;
+                let st = this.statusID;
+                this.statistics.status_name = this.userstatuses.filter(function(obj) {
+                    return obj.status_id === st;
+                })[0].status_name;
+
+                // Start update user status every X interval
+                this.Interval = setInterval(() => {
+                    this.updCurrentUserStatus(id, this.statusID);
+                }, 20000);
+
+            });
+            this.getUser(id);
         });
-        this.getCurrentUserStatus(id);
-        this.getUser(id);
     }
 
 }

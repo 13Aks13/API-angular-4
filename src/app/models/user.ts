@@ -5,8 +5,11 @@ export class User {
     password: string;
     status: string;
     today: any;
-    brake: any;
+    offline: any;
+    checkin: any;
     lunche: any;
+    brake: any;
+    call: any;
     week: any;
     month: any;
     quatter: any;

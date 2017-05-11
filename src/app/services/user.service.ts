@@ -23,7 +23,7 @@ export class UserService {
     private userUrl = 'users';
     private statusUrl = 'status';
     private statusesUrl = 'statuses';
-
+    private timeUrl = 'time';
 
     constructor(
         private http: Http,
@@ -55,8 +55,8 @@ export class UserService {
             .then(response => response.json().data as User)
             .catch(this.handleError);
     }
-
-/*    getUsers(): Promise<User[]> {
+/*
+    getUsers(): Promise<User[]> {
         // add authorization header with jwt token
         let headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token });
         let options = new RequestOptions({ headers: headers });
@@ -67,8 +67,8 @@ export class UserService {
             .toPromise()
             .then(response => response.json().data as User[])
             .catch(this.handleError);
-    }*/
-
+    }
+*/
     getStatuses(): Promise<UserStatuses[]> {
         // add authorization header with jwt token
         let headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token });
@@ -116,6 +116,24 @@ export class UserService {
         return this.http.put(url, { user_id: user_id, status_id: status_id }, options)
             .toPromise()
             .then(response => response.json().data as Statistics)
+            .catch(this.handleError);
+    }
+
+    getTime(user_id: number, status_id: number): Promise<any> {
+        let headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token });
+        let options = new RequestOptions({ headers: headers });
+        const url = `${this.domain}${this.timeUrl}`;
+
+        let start = new Date();
+        start.setHours(0, 0, 0, 0);
+
+        let end = new Date().getTime();
+
+        console.log(start);
+        console.log(end);
+        return this.http.post(url, { user_id: user_id, status_id: status_id }, options)
+            .toPromise()
+            .then(response => response.json())
             .catch(this.handleError);
     }
 
