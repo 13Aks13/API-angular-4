@@ -19,6 +19,7 @@ export class UserService {
     // URL to web api
     private domain = 'http://ws.dev/';
     // private domain = 'http://wsapi.test-y-sbm.com/';
+    private registerUrl = 'register';
     private userUrl = 'users';
     private statusUrl = 'status';
     private statusesUrl = 'statuses';
@@ -34,6 +35,14 @@ export class UserService {
         return Promise.reject(error.message || error);
     }
 
+    create(user: User): Promise<User> {
+        const url = `${this.domain}${this.registerUrl}`;
+        return this.http.post(url, user)
+            .toPromise()
+            .then(response => response.json().data as User)
+            .catch(this.handleError);
+    }
+
     getUser(id: number): Promise<User> {
         // add authorization header with jwt token
         let headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token });
@@ -47,7 +56,7 @@ export class UserService {
             .catch(this.handleError);
     }
 
-    getUsers(): Promise<User[]> {
+/*    getUsers(): Promise<User[]> {
         // add authorization header with jwt token
         let headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token });
         let options = new RequestOptions({ headers: headers });
@@ -58,7 +67,7 @@ export class UserService {
             .toPromise()
             .then(response => response.json().data as User[])
             .catch(this.handleError);
-    }
+    }*/
 
     getStatuses(): Promise<UserStatuses[]> {
         // add authorization header with jwt token
@@ -91,9 +100,20 @@ export class UserService {
         let options = new RequestOptions({ headers: headers });
         const url = `${this.domain}${this.statusUrl}`;
 
-
         // set user statuses for api
         return this.http.post(url, { user_id: user_id, status_id: status_id }, options)
+            .toPromise()
+            .then(response => response.json().data as Statistics)
+            .catch(this.handleError);
+    }
+
+    updCurrentUserStatus(user_id: number, status_id: number): Promise<Statistics> {
+        let headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token });
+        let options = new RequestOptions({ headers: headers });
+        const url = `${this.domain}${this.statusUrl}`;
+
+        // set user statuses for api
+        return this.http.put(url, { user_id: user_id, status_id: status_id }, options)
             .toPromise()
             .then(response => response.json().data as Statistics)
             .catch(this.handleError);

@@ -61,18 +61,16 @@ export class HomeComponent implements OnInit {
     ngOnInit() {
         // Get user statuses
         this.getStatuses().then(() => {
-            console.log(this.userstatuses);
             // User Id
             let id = JSON.parse(localStorage.getItem('currentUser')).id;
             // Current status
             this.getCurrentUserStatus(id).then(() => {
-                // to do -> to underscore
-                for (let i = 0; i < this.userstatuses.length; i++) {
-                    if (this.userstatuses[i].status_id === this.statistics.status_id) {
-                        this.statistics.status_name =  this.userstatuses[i].status_name;
-                        break;
-                    };
-                }
+                // Fast filter for array
+                let st = this.statistics.status_id;
+                this.statistics.status_name = this.userstatuses.filter(function(obj) {
+                     return obj.status_id === st;
+                })[0].status_name;
+
                 // User ID
                 this.getUser(id);
             });
