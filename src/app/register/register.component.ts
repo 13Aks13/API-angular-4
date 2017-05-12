@@ -9,7 +9,6 @@ import { AlertService } from '../services/alert.service';
 import { UserService } from '../services/user.service';
 
 @Component({
-    moduleId: module.id,
     templateUrl: 'register.component.html'
 })
 

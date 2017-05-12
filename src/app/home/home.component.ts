@@ -18,7 +18,6 @@ import 'rxjs/add/operator/switchMap';
 import * as moment from 'moment/moment';
 
 @Component({
-    moduleId: module.id,
     templateUrl: './home.component.html',
     styleUrls: [ './home.component.css' ]
 })
@@ -83,8 +82,8 @@ export class HomeComponent implements OnInit {
             // Current status
             this.getCurrentUserStatus(id).then(() => {
                 // Fast filter for array
-                this.statusID = this.statistics.status_id;
-                let st = this.statusID;
+                let st = this.statistics.status_id;
+
                 this.statistics.status_name = this.userstatuses.filter(function(obj) {
                      return obj.status_id === st;
                 })[0].status_name;
@@ -95,11 +94,10 @@ export class HomeComponent implements OnInit {
                     this.setCurrentUserStatus(id, 1).then(() => {
                         this.getCurrentUserStatus(id).then(() => {
                             // Fast filter for array
-                            this.statusID = this.statistics.status_id;
-                            let st0 = this.statusID;
                             this.statistics.status_name = this.userstatuses.filter(function (obj) {
-                                return obj.status_id === st0;
+                                return obj.status_id === 1;
                             })[0].status_name;
+                            console.log(this.statistics.status_name);
                         });
                     });
                 }
@@ -122,12 +120,20 @@ export class HomeComponent implements OnInit {
                                         break;
                                    }
                                 // console.log(this.time);
-                                console.log(this.user);
+                                // console.log(this.user);
                             });
                     }
 
-                    this.updCurrentUserStatus(id, this.statusID);
-                }, 40000);
+                    this.updCurrentUserStatus(id, this.statistics.status_id).then(() => {
+                        this.getCurrentUserStatus(id).then(() => {
+                            // Fast filter for array
+                            this.statistics.status_name = this.userstatuses.filter(function (obj) {
+                                return obj.status_id === 1;
+                            })[0].status_name;
+                            console.log(this.statistics.status_name);
+                        });
+                    });
+                }, 60000);
             });
         });
     }
@@ -139,16 +145,15 @@ export class HomeComponent implements OnInit {
             clearInterval(this.Interval);
             this.getCurrentUserStatus(id).then(() => {
                 // Fast filter for array
-                this.statusID = this.statistics.status_id;
-                let st = this.statusID;
+                let st = this.statistics.status_id;
                 this.statistics.status_name = this.userstatuses.filter(function(obj) {
                     return obj.status_id === st;
                 })[0].status_name;
 
                 // Start update user status every X interval
                 this.Interval = setInterval(() => {
-                    this.updCurrentUserStatus(id, this.statusID);
-                }, 40000);
+                    this.updCurrentUserStatus(id, this.statistics.status_id);
+                }, 60000);
 
             });
             this.getUser(id);

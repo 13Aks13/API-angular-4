@@ -58,14 +58,15 @@
             </li>
         </ul>
     </div>
-    <div class="col-md-5">
-        <ul class="time-group" *ngIf="user">
-            <li><label>Offline: </label>{{user.offline}}</li>
-            <li><label>Checkin: </label>{{user.checkin}}</li>
-            <li><label>Lunche: </label>{{user.lunche}}</li>
-            <li><label>Brake: </label>{{user.brake}}</li>
-            <li><label>Call: </label>{{user.call}}</li>
-        </ul>
+    <div class="col-md-3">
+        <div class="time-group" *ngIf="user">
+            <button type="button" class="list-group-item" disabled>Total in work: {{user.today}}</button>
+            <button type="button" class="list-group-item" disabled>Offline: {{user.offline}}</button>
+            <button type="button" class="list-group-item" disabled>Checkin: {{user.checkin}}</button>
+            <button type="button" class="list-group-item" disabled>Lunche: {{user.lunche}}</button>
+            <button type="button" class="list-group-item" disabled>Brake: {{user.brake}}</button>
+            <button type="button" class="list-group-item" disabled>Call: {{user.call}}</button>
+        </div>
     </div>
 </div>
 

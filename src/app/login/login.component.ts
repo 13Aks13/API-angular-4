@@ -8,7 +8,6 @@ import { Router } from '@angular/router';
 import { AuthenticationService } from '../services/authentication.service';
 
 @Component({
-    moduleId: module.id,
     templateUrl: './login.component.html',
     styleUrls: [ './login.component.css' ]
 
