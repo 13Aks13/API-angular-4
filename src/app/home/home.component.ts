@@ -8,15 +8,14 @@ import { ActivatedRoute } from '@angular/router';
 import { User } from '../models/user';
 import { Statistics } from '../models/statistics';
 import { UserStatuses } from '../models/userstatuses';
-
+import { Time } from '../models/time';
 
 import { UserService } from '../services/user.service';
 
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/switchMap';
-import {forEach} from "@angular/router/src/utils/collection";
-
+import * as moment from 'moment/moment';
 
 @Component({
     moduleId: module.id,
@@ -29,12 +28,12 @@ export class HomeComponent implements OnInit {
     statistics: Statistics;
 //    statisticses: Statistics[] = [];
     userstatuses: UserStatuses[] = [];
+    time: Time;
 
     selectedStatuses: UserStatuses;
 
     private Interval: any;
     private statusID: any;
-    private staTime: any;
 
     constructor(
         private userService: UserService,
@@ -58,8 +57,8 @@ export class HomeComponent implements OnInit {
             .then(statistics => this.statistics = statistics);
     }
 
-    setCurrentUserStatus(): any {
-        return this.userService.setCurrentUserStatus(this.user.id, this.selectedStatuses.status_id)
+    setCurrentUserStatus(user_id: number, status_id: number): any {
+        return this.userService.setCurrentUserStatus(user_id, status_id)
             .then(statistics => this.statistics = statistics);
     }
 
@@ -70,7 +69,7 @@ export class HomeComponent implements OnInit {
 
     getTime(user_id: number, status_id: number): any {
         return this.userService.getTime(user_id, status_id)
-            .then(staTime => this.staTime = staTime);
+            .then(time => this.time = time);
     }
 
     ngOnInit() {
@@ -90,10 +89,31 @@ export class HomeComponent implements OnInit {
                      return obj.status_id === st;
                 })[0].status_name;
 
+                // Get last user status and check it to today
+                if (this.statistics.added !== moment().format('YYYY-MM-DD')) {
+                    // Set default status offline for new day
+                    this.setCurrentUserStatus(id, 1).then(() => {
+                        this.getCurrentUserStatus(id).then(() => {
+                            // Fast filter for array
+                            this.statusID = this.statistics.status_id;
+                            let st0 = this.statusID;
+                            this.statistics.status_name = this.userstatuses.filter(function (obj) {
+                                return obj.status_id === st0;
+                            })[0].status_name;
+                        });
+                    });
+                }
+
                 // Start update user status every X interval
                 this.Interval = setInterval(() => {
 
-                    for
+                    for (let i = 0; i < this.userstatuses.length; i++) {
+                        this.getTime(id, this.userstatuses[i].status_id)
+                            .then(() => {
+                                console.log(this.time);
+                                console.log(this.user);
+                            });
+                    }
 
                     this.updCurrentUserStatus(id, this.statusID);
                 }, 20000);
@@ -101,14 +121,10 @@ export class HomeComponent implements OnInit {
         });
     }
 
-    ngOnDestroy() {
-    //    clearInterval();
-    }
-
     onSelect(userstatus: UserStatuses): void {
         let id = JSON.parse(localStorage.getItem('currentUser')).id;
         this.selectedStatuses = userstatus;
-        this.setCurrentUserStatus().then(() => {
+        this.setCurrentUserStatus(id, this.selectedStatuses.status_id).then(() => {
             clearInterval(this.Interval);
             this.getCurrentUserStatus(id).then(() => {
                 // Fast filter for array

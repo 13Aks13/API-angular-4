@@ -6,11 +6,14 @@ import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions } from '@angular/http';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
+import * as moment from 'moment/moment';
+
 
 import { AuthenticationService } from './authentication.service';
 import { User } from '../models/user';
 import { Statistics } from '../models/statistics';
 import { UserStatuses } from '../models/userstatuses';
+import { Time } from '../models/time';
 
 
 @Injectable()
@@ -24,6 +27,7 @@ export class UserService {
     private statusUrl = 'status';
     private statusesUrl = 'statuses';
     private timeUrl = 'time';
+
 
     constructor(
         private http: Http,
@@ -124,16 +128,12 @@ export class UserService {
         let options = new RequestOptions({ headers: headers });
         const url = `${this.domain}${this.timeUrl}`;
 
-        let start = new Date();
-        start.setHours(0, 0, 0, 0);
+        let start =  moment().format('YYYY-MM-DD') + ' ' + '00:00:00' ;
+        let end = moment().format('YYYY-MM-DD') + ' ' + '23:59:59';
 
-        let end = new Date().getTime();
-
-        console.log(start);
-        console.log(end);
-        return this.http.post(url, { user_id: user_id, status_id: status_id }, options)
+        return this.http.post(url, { user_id: user_id, status_id: status_id, 'start': start, 'end': end }, options)
             .toPromise()
-            .then(response => response.json())
+            .then(response => console.log(response.json()) )
             .catch(this.handleError);
     }
 
