@@ -123,7 +123,7 @@ export class UserService {
             .catch(this.handleError);
     }
 
-    getTime(user_id: number, status_id: number): Promise<any> {
+    getTime(user_id: number, status_id: number): Promise<Time> {
         let headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token });
         let options = new RequestOptions({ headers: headers });
         const url = `${this.domain}${this.timeUrl}`;
@@ -133,7 +133,7 @@ export class UserService {
 
         return this.http.post(url, { user_id: user_id, status_id: status_id, 'start': start, 'end': end }, options)
             .toPromise()
-            .then(response => console.log(response.json()) )
+            .then(response => (response.json() as Time))
             .catch(this.handleError);
     }
 
