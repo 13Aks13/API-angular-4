@@ -60,7 +60,11 @@
     </div>
     <div class="col-md-5">
         <ul class="time-group" *ngIf="user">
-
+            <li><label>Offline: </label>{{user.offline}}</li>
+            <li><label>Checkin: </label>{{user.checkin}}</li>
+            <li><label>Lunche: </label>{{user.lunche}}</li>
+            <li><label>Brake: </label>{{user.brake}}</li>
+            <li><label>Call: </label>{{user.call}}</li>
         </ul>
     </div>
 </div>

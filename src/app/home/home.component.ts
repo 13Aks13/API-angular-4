@@ -106,17 +106,28 @@ export class HomeComponent implements OnInit {
 
                 // Start update user status every X interval
                 this.Interval = setInterval(() => {
-
                     for (let i = 0; i < this.userstatuses.length; i++) {
                         this.getTime(id, this.userstatuses[i].status_id)
                             .then(() => {
-                                console.log(this.time);
+                                switch (this.time.status_id) {
+                                    case 1: this.user.offline =  this.time.seconds;
+                                      break;
+                                    case 2:  this.user.checkin =  this.time.seconds;
+                                        break;
+                                    case 3: this.user.lunche =  this.time.seconds;
+                                        break;
+                                    case 4: this.user.brake =  this.time.seconds;
+                                        break;
+                                    case 5: this.user.call =  this.time.seconds;
+                                        break;
+                                   }
+                                // console.log(this.time);
                                 console.log(this.user);
                             });
                     }
 
                     this.updCurrentUserStatus(id, this.statusID);
-                }, 20000);
+                }, 40000);
             });
         });
     }
@@ -137,7 +148,7 @@ export class HomeComponent implements OnInit {
                 // Start update user status every X interval
                 this.Interval = setInterval(() => {
                     this.updCurrentUserStatus(id, this.statusID);
-                }, 20000);
+                }, 40000);
 
             });
             this.getUser(id);
