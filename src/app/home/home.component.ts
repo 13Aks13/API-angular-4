@@ -18,6 +18,7 @@ import 'rxjs/add/operator/switchMap';
 import * as moment from 'moment/moment';
 
 @Component({
+//    selector: 'nav',
     templateUrl: './home.component.html',
     styleUrls: [ './home.component.css' ]
 })
@@ -39,11 +40,10 @@ export class HomeComponent implements OnInit {
         private route: ActivatedRoute,
     ) { }
 
-
     // get user by token
     getUserByToken(token: string): any {
         this.userService.getUserByToken(token)
-            .then(user => this.user = user);
+            .then( response => this.user = response );
     }
 
     // Get User by ID
@@ -53,8 +53,8 @@ export class HomeComponent implements OnInit {
     }
 
     // Get user statuses
-    getStatuses(): any {
-        return this.userService.getStatuses()
+    getStatuses(token: string): any {
+        return this.userService.getStatuses(token)
             .then(userstatuses => this.userstatuses = userstatuses);
     }
 
@@ -81,11 +81,14 @@ export class HomeComponent implements OnInit {
     ngOnInit() {
         // User Token
         const token = JSON.parse(localStorage.getItem('currentUser')).token;
-        console.log(token);
-        //Get User
-        this.getUserByToken(token).then(() => {
-            console.log(this.user);
-        });
+
+        // Get User
+        this.getUserByToken(token);
+
+        console.log(this.user);
+        // Get all statuses
+        this.getStatuses(token);
+
 
         // // Get user statuses
         // this.getStatuses().then(() => {

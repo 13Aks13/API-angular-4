@@ -4,6 +4,7 @@
 
 import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions } from '@angular/http';
+import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
 import * as moment from 'moment/moment';
@@ -47,18 +48,15 @@ export class UserService {
             .catch(this.handleError);
     }
 
-    getUserByToken(token: string): Promise<User> {
-        // add authorization header with jwt token
-        const headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token });
-        const options = new RequestOptions({ headers: headers });
+    getUserByToken(token: string): Promise<User>  {
         // token
         const url = `${this.domain}${this.usersUrl}/me?token=${token}`;
 
         // get user by token
-        return this.http.get(url)
-            .toPromise()
-            .then(response => response.json().user as User)
-            .catch(this.handleError);
+         return this.http.get(url)
+             .toPromise()
+             .then(response => response.json().data as User)
+             .catch(this.handleError);
     }
 
     getUser(id: number): Promise<User> {
@@ -87,14 +85,11 @@ export class UserService {
             .catch(this.handleError);
     }
 */
-    getStatuses(): Promise<UserStatuses[]> {
-        // add authorization header with jwt token
-        const headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token });
-        const options = new RequestOptions({ headers: headers });
-        const url = `${this.domain}${this.statusesUrl}`;
+    getStatuses(token: string): Promise<UserStatuses[]> {
+        const url = `${this.domain}${this.statusesUrl}?token=${token}`;
 
         // get user statuses from api
-        return this.http.get(url, options)
+        return this.http.get(url)
             .toPromise()
             .then(response => response.json().data as UserStatuses[])
             .catch(this.handleError);

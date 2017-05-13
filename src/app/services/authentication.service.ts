@@ -36,7 +36,6 @@ export class AuthenticationService {
             .map((response: Response) => {
                 // login successful if there's a jwt token in the response
                 const user = response.json();
-                console.log(response.json());
                 if (user && user.token) {
                     // store user details and jwt token in local storage to keep user logged in between page refreshes
                     localStorage.setItem('currentUser', JSON.stringify(user));
@@ -50,8 +49,8 @@ export class AuthenticationService {
         localStorage.removeItem('currentUser');
     }
 
-    private handleError(error: any): Promise<any> {
-        console.error('An error occurred', error);
-        return Promise.reject(error.message || error);
-    }
+    // private handleError(error: any): Promise<any> {
+    //     console.error('An error occurred', error);
+    //     return Promise.reject(error.message || error);
+    // }
 }
