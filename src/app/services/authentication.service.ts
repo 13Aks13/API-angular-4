@@ -4,7 +4,8 @@
  */
 
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { Http, Headers, Response } from '@angular/http';
+import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
 
@@ -21,33 +22,48 @@ export class AuthenticationService {
 
     constructor(private http: Http) {
         // set token if saved in local storage
-        let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        const currentUser = JSON.parse(localStorage.getItem('currentUser'));
         this.token = currentUser && currentUser.token;
     }
 
+    login(email: string, password: string) {
 
-    login(email: string, password: string): Promise<any> {
+        const url = `${this.domain}${this.loginUrl}`;
 
-        let url = `${this.domain}${this.loginUrl}`;
-
-        return this.http.post(url, JSON.stringify({email: email, password: password}))
-            .toPromise()
-            .then(response => {
-                let token = JSON.parse(response.text()).token;
-                let id = JSON.parse(response.text()).user.id;
-                if (token) {
-                    // set token property
-                    this.token = token;
-                    // store username and jwt token in local storage to keep user logged in between page refreshes
-                    localStorage.setItem('currentUser', JSON.stringify({ email: email, token: token, id: id }));
-                    // get token true
-                    return true;
-                } else {
-                    return false;
+        return this.http.post(url, JSON.stringify({ email: email, password: password }))
+            .map((response: Response) => {
+                // login successful if there's a jwt token in the response
+                const user = response.json();
+                if (user && user.token) {
+                    // store user details and jwt token in local storage to keep user logged in between page refreshes
+                    localStorage.setItem('currentUser', JSON.stringify(user));
                 }
-            })
-            .catch(this.handleError);
-    };
+            });
+    }
+
+
+    // login(email: string, password: string): Promise<any> {
+    //
+    //     const url = `${this.domain}${this.loginUrl}`;
+    //
+    //     return this.http.post(url, JSON.stringify({email: email, password: password}))
+    //         .toPromise()
+    //         .then(response => {
+    //             const token = JSON.parse(response.text()).token;
+    //             const id = JSON.parse(response.text()).user.id;
+    //             if (token) {
+    //                 // set token property
+    //                 this.token = token;
+    //                 // store username and jwt token in local storage to keep user logged in between page refreshes
+    //                 localStorage.setItem('currentUser', JSON.stringify({ email: email, token: token, id: id }));
+    //                 // get token true
+    //                 return true;
+    //             } else {
+    //                 return false;
+    //             }
+    //         })
+    //         .catch(this.handleError);
+    // };
 
     logout(): void {
         // clear token remove user from local storage to log user out

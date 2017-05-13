@@ -49,8 +49,8 @@ export class UserService {
 
     getUser(id: number): Promise<User> {
         // add authorization header with jwt token
-        let headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token });
-        let options = new RequestOptions({ headers: headers });
+        const headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token });
+        const options = new RequestOptions({ headers: headers });
         const url = `${this.domain}${this.userUrl}/${id}`;
 
         // get user by id
@@ -75,8 +75,8 @@ export class UserService {
 */
     getStatuses(): Promise<UserStatuses[]> {
         // add authorization header with jwt token
-        let headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token });
-        let options = new RequestOptions({ headers: headers });
+        const headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token });
+        const options = new RequestOptions({ headers: headers });
         const url = `${this.domain}${this.statusesUrl}`;
 
         // get user statuses from api
@@ -88,8 +88,8 @@ export class UserService {
 
     getCurrentUserStatus(user_id: number): Promise<Statistics> {
         // add authorization header with jwt token
-        let headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token });
-        let options = new RequestOptions({ headers: headers });
+        const headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token });
+        const options = new RequestOptions({ headers: headers });
         const url = `${this.domain}${this.statusUrl}?user_id=${user_id}` ;
 
         // get user current status from Statistic
@@ -100,8 +100,8 @@ export class UserService {
     }
 
     setCurrentUserStatus(user_id: number, status_id: number): Promise<Statistics> {
-        let headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token });
-        let options = new RequestOptions({ headers: headers });
+        const headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token });
+        const options = new RequestOptions({ headers: headers });
         const url = `${this.domain}${this.statusUrl}`;
 
         // set user statuses for api
@@ -112,8 +112,8 @@ export class UserService {
     }
 
     updCurrentUserStatus(user_id: number, status_id: number): Promise<Statistics> {
-        let headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token });
-        let options = new RequestOptions({ headers: headers });
+        const headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token });
+        const options = new RequestOptions({ headers: headers });
         const url = `${this.domain}${this.statusUrl}`;
 
         // set user statuses for api
@@ -124,12 +124,12 @@ export class UserService {
     }
 
     getTime(user_id: number, status_id: number): Promise<Time> {
-        let headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token });
-        let options = new RequestOptions({ headers: headers });
+        const headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token });
+        const options = new RequestOptions({ headers: headers });
         const url = `${this.domain}${this.timeUrl}`;
 
-        let start =  moment().format('YYYY-MM-DD') + ' ' + '00:00:00' ;
-        let end = moment().format('YYYY-MM-DD') + ' ' + '23:59:59';
+        const start =  moment().format('YYYY-MM-DD') + ' ' + '00:00:00' ;
+        const end = moment().format('YYYY-MM-DD') + ' ' + '23:59:59';
 
         return this.http.post(url, { user_id: user_id, status_id: status_id, 'start': start, 'end': end }, options)
             .toPromise()
