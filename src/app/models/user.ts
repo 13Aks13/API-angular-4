@@ -2,8 +2,8 @@ export class User {
     id: any;
     name: string;
     email: string;
-    password: string;
-    status: string;
+    avatar: any;
+    goal: any;
     today: any;
     offline: any;
     checkin: any;

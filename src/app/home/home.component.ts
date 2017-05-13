@@ -39,6 +39,13 @@ export class HomeComponent implements OnInit {
         private route: ActivatedRoute,
     ) { }
 
+
+    // get user by token
+    getUserByToken(token: string): any {
+        this.userService.getUserByToken(token)
+            .then(user => this.user = user);
+    }
+
     // Get User by ID
     getUser(id: number): void {
         this.userService.getUser(id)
@@ -72,92 +79,97 @@ export class HomeComponent implements OnInit {
     }
 
     ngOnInit() {
-        // User Id
-        let id = JSON.parse(localStorage.getItem('currentUser')).id;
-
-        // Get user statuses
-        this.getStatuses().then(() => {
-            // Get user by ID
-            this.getUser(id);
-            // Current status
-            this.getCurrentUserStatus(id).then(() => {
-                // Fast filter for array
-                let st = this.statistics.status_id;
-
-                this.statistics.status_name = this.userstatuses.filter(function(obj) {
-                     return obj.status_id === st;
-                })[0].status_name;
-
-                // Get last user status and check it to today
-                if (this.statistics.added !== moment().format('YYYY-MM-DD')) {
-                    // Set default status offline for new day
-                    this.setCurrentUserStatus(id, 1).then(() => {
-                        this.getCurrentUserStatus(id).then(() => {
-                            // Fast filter for array
-                            this.statistics.status_name = this.userstatuses.filter(function (obj) {
-                                return obj.status_id === 1;
-                            })[0].status_name;
-                            console.log(this.statistics.status_name);
-                        });
-                    });
-                }
-
-                // Start update user status every X interval
-                this.Interval = setInterval(() => {
-                    for (let i = 0; i < this.userstatuses.length; i++) {
-                        this.getTime(id, this.userstatuses[i].status_id)
-                            .then(() => {
-                                switch (this.time.status_id) {
-                                    case 1: this.user.offline =  this.time.seconds;
-                                      break;
-                                    case 2:  this.user.checkin =  this.time.seconds;
-                                        break;
-                                    case 3: this.user.lunche =  this.time.seconds;
-                                        break;
-                                    case 4: this.user.brake =  this.time.seconds;
-                                        break;
-                                    case 5: this.user.call =  this.time.seconds;
-                                        break;
-                                   }
-                                // console.log(this.time);
-                                // console.log(this.user);
-                            });
-                    }
-
-                    this.updCurrentUserStatus(id, this.statistics.status_id).then(() => {
-                        this.getCurrentUserStatus(id).then(() => {
-                            // Fast filter for array
-                            this.statistics.status_name = this.userstatuses.filter(function (obj) {
-                                return obj.status_id === 1;
-                            })[0].status_name;
-                            console.log(this.statistics.status_name);
-                        });
-                    });
-                }, 60000);
-            });
+        // User Token
+        const token = JSON.parse(localStorage.getItem('currentUser')).token;
+        console.log(token);
+        //Get User
+        this.getUserByToken(token).then(() => {
+            console.log(this.user);
         });
+
+        // // Get user statuses
+        // this.getStatuses().then(() => {
+        //     // Get user by ID
+        //     this.getUser(id);
+        //     // Current status
+        //     this.getCurrentUserStatus(id).then(() => {
+        //         // Fast filter for array
+        //         const st = this.statistics.status_id;
+        //
+        //         this.statistics.status_name = this.userstatuses.filter(function(obj) {
+        //              return obj.status_id === st;
+        //         })[0].status_name;
+        //
+        //         // Get last user status and check it to today
+        //         if (this.statistics.added !== moment().format('YYYY-MM-DD')) {
+        //             // Set default status offline for new day
+        //             this.setCurrentUserStatus(id, 1).then(() => {
+        //                 this.getCurrentUserStatus(id).then(() => {
+        //                     // Fast filter for array
+        //                     this.statistics.status_name = this.userstatuses.filter(function (obj) {
+        //                         return obj.status_id === 1;
+        //                     })[0].status_name;
+        //                     console.log(this.statistics.status_name);
+        //                 });
+        //             });
+        //         }
+        //
+        //         // Start update user status every X interval
+        //         this.Interval = setInterval(() => {
+        //             for (let i = 0; i < this.userstatuses.length; i++) {
+        //                 this.getTime(id, this.userstatuses[i].status_id)
+        //                     .then(() => {
+        //                         switch (this.time.status_id) {
+        //                             case 1: this.user.offline =  this.time.seconds;
+        //                               break;
+        //                             case 2:  this.user.checkin =  this.time.seconds;
+        //                                 break;
+        //                             case 3: this.user.lunche =  this.time.seconds;
+        //                                 break;
+        //                             case 4: this.user.brake =  this.time.seconds;
+        //                                 break;
+        //                             case 5: this.user.call =  this.time.seconds;
+        //                                 break;
+        //                            }
+        //                         // console.log(this.time);
+        //                         // console.log(this.user);
+        //                     });
+        //             }
+        //
+        //             this.updCurrentUserStatus(id, this.statistics.status_id).then(() => {
+        //                 this.getCurrentUserStatus(id).then(() => {
+        //                     // Fast filter for array
+        //                     this.statistics.status_name = this.userstatuses.filter(function (obj) {
+        //                         return obj.status_id === 1;
+        //                     })[0].status_name;
+        //                     console.log(this.statistics.status_name);
+        //                 });
+        //             });
+        //         }, 60000);
+        //     });
+        // });
     }
 
-    onSelect(userstatus: UserStatuses): void {
-        let id = JSON.parse(localStorage.getItem('currentUser')).id;
-        this.selectedStatuses = userstatus;
-        this.setCurrentUserStatus(id, this.selectedStatuses.status_id).then(() => {
-            clearInterval(this.Interval);
-            this.getCurrentUserStatus(id).then(() => {
-                // Fast filter for array
-                let st = this.statistics.status_id;
-                this.statistics.status_name = this.userstatuses.filter(function(obj) {
-                    return obj.status_id === st;
-                })[0].status_name;
-
-                // Start update user status every X interval
-                this.Interval = setInterval(() => {
-                    this.updCurrentUserStatus(id, this.statistics.status_id);
-                }, 60000);
-
-            });
-            this.getUser(id);
-        });
-    }
+    // onSelect(userstatus: UserStatuses): void {
+    //     let id = JSON.parse(localStorage.getItem('currentUser')).id;
+    //     this.selectedStatuses = userstatus;
+    //     this.setCurrentUserStatus(id, this.selectedStatuses.status_id).then(() => {
+    //         clearInterval(this.Interval);
+    //         this.getCurrentUserStatus(id).then(() => {
+    //             // Fast filter for array
+    //             let st = this.statistics.status_id;
+    //             this.statistics.status_name = this.userstatuses.filter(function(obj) {
+    //                 return obj.status_id === st;
+    //             })[0].status_name;
+    //
+    //             // Start update user status every X interval
+    //             this.Interval = setInterval(() => {
+    //                 this.updCurrentUserStatus(id, this.statistics.status_id);
+    //             }, 60000);
+    //
+    //         });
+    //         this.getUser(id);
+    //     });
+    // }
 
 }

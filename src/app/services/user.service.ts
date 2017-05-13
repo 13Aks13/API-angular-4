@@ -23,7 +23,7 @@ export class UserService {
     private domain = 'http://ws.dev/';
     // private domain = 'http://wsapi.test-y-sbm.com/';
     private registerUrl = 'register';
-    private userUrl = 'users';
+    private usersUrl = 'users';
     private statusUrl = 'status';
     private statusesUrl = 'statuses';
     private timeUrl = 'time';
@@ -47,11 +47,25 @@ export class UserService {
             .catch(this.handleError);
     }
 
+    getUserByToken(token: string): Promise<User> {
+        // add authorization header with jwt token
+        const headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token });
+        const options = new RequestOptions({ headers: headers });
+        // token
+        const url = `${this.domain}${this.usersUrl}/me?token=${token}`;
+
+        // get user by token
+        return this.http.get(url)
+            .toPromise()
+            .then(response => response.json().user as User)
+            .catch(this.handleError);
+    }
+
     getUser(id: number): Promise<User> {
         // add authorization header with jwt token
         const headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token });
         const options = new RequestOptions({ headers: headers });
-        const url = `${this.domain}${this.userUrl}/${id}`;
+        const url = `${this.domain}${this.usersUrl}/${id}`;
 
         // get user by id
         return this.http.get(url, options)

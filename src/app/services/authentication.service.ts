@@ -4,7 +4,7 @@
  */
 
 import { Injectable } from '@angular/core';
-import { Http, Headers, Response } from '@angular/http';
+import { Http, Headers, Response, RequestOptions  } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
@@ -27,43 +27,22 @@ export class AuthenticationService {
     }
 
     login(email: string, password: string) {
+        const headers = new Headers({ 'Content-Type': 'x-www-form-urlencoded' });
+        const options = new RequestOptions({ headers: headers });
 
         const url = `${this.domain}${this.loginUrl}`;
 
-        return this.http.post(url, JSON.stringify({ email: email, password: password }))
+        return this.http.post(url, JSON.stringify({ email: email, password: password }), options)
             .map((response: Response) => {
                 // login successful if there's a jwt token in the response
                 const user = response.json();
+                console.log(response.json());
                 if (user && user.token) {
                     // store user details and jwt token in local storage to keep user logged in between page refreshes
                     localStorage.setItem('currentUser', JSON.stringify(user));
                 }
             });
     }
-
-
-    // login(email: string, password: string): Promise<any> {
-    //
-    //     const url = `${this.domain}${this.loginUrl}`;
-    //
-    //     return this.http.post(url, JSON.stringify({email: email, password: password}))
-    //         .toPromise()
-    //         .then(response => {
-    //             const token = JSON.parse(response.text()).token;
-    //             const id = JSON.parse(response.text()).user.id;
-    //             if (token) {
-    //                 // set token property
-    //                 this.token = token;
-    //                 // store username and jwt token in local storage to keep user logged in between page refreshes
-    //                 localStorage.setItem('currentUser', JSON.stringify({ email: email, token: token, id: id }));
-    //                 // get token true
-    //                 return true;
-    //             } else {
-    //                 return false;
-    //             }
-    //         })
-    //         .catch(this.handleError);
-    // };
 
     logout(): void {
         // clear token remove user from local storage to log user out

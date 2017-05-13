@@ -4,6 +4,8 @@
 
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Http, Headers, RequestOptions } from '@angular/http';
+
 
 import { AuthenticationService } from '../services/authentication.service';
 import { AlertService } from '../services/alert.service';
@@ -18,13 +20,13 @@ export class LoginComponent implements OnInit {
     model: any = {};
     loading = false;
     error = '';
-    returnUrl: string;
 
     constructor(
         private route: ActivatedRoute,
         private router: Router,
         private authenticationService: AuthenticationService,
         private alertService: AlertService) { }
+
     ngOnInit() {
         // reset login status
         this.authenticationService.logout();
@@ -32,28 +34,15 @@ export class LoginComponent implements OnInit {
 
     login() {
         this.loading = true;
-        this.authenticationService.login(this.model.username, this.model.password)
+        this.authenticationService.login(this.model.email, this.model.password)
             .subscribe(
                 data => {
-                    this.router.navigate([this.returnUrl]);
+                    this.router.navigate(['/']);
                 },
                 error => {
                     this.alertService.error(error);
                     this.loading = false;
                 });
     }
-
-    // login() {
-    //     this.loading = true;
-    //     this.authenticationService.login(this.model.email, this.model.password)
-    //         .then(res => {
-    //             if (res === true) {
-    //                 this.router.navigate(['/']);
-    //             } else {
-    //                 this.error = 'Email or password is incorrect';
-    //                 this.loading = false;
-    //             }
-    //         });
-    // }
 
 }
