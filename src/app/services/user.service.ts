@@ -111,6 +111,8 @@ export class UserService {
         const options = new RequestOptions({ headers: headers });
         const url = `${this.domain}${this.statusUrl}`;
 
+        console.log(url);
+        console.log(this.authenticationService.token);
         // set user statuses for api
         return this.http.post(url, { user_id: user_id, status_id: status_id }, options)
             .toPromise()

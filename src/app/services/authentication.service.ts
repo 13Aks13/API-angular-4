@@ -38,6 +38,7 @@ export class AuthenticationService {
                 const user = response.json();
                 if (user && user.token) {
                     // store user details and jwt token in local storage to keep user logged in between page refreshes
+                    this.token = user.token;
                     localStorage.setItem('currentUser', JSON.stringify(user));
                 }
             });
@@ -49,8 +50,4 @@ export class AuthenticationService {
         localStorage.removeItem('currentUser');
     }
 
-    // private handleError(error: any): Promise<any> {
-    //     console.error('An error occurred', error);
-    //     return Promise.reject(error.message || error);
-    // }
 }

@@ -40,37 +40,7 @@ export class HomeComponent implements OnInit {
         private route: ActivatedRoute,
     ) { }
 
-    // get user by token
-    getUserByToken(token: string): any {
-        this.userService.getUserByToken(token)
-            .then( response => this.user = response );
-    }
 
-    // Get User by ID
-    getUser(id: number): void {
-        this.userService.getUser(id)
-            .then(user => this.user = user);
-    }
-
-    getCurrentUserStatus(token: string, id: number): any {
-        return this.userService.getCurrentUserStatus(token, id)
-            .then(statistics => this.statistics = statistics);
-    }
-
-    setCurrentUserStatus(user_id: number, status_id: number): any {
-        return this.userService.setCurrentUserStatus(user_id, status_id)
-            .then(statistics => this.statistics = statistics);
-    }
-
-    updCurrentUserStatus(user_id: number, status_id: number): any {
-        return this.userService.updCurrentUserStatus(user_id, status_id)
-            .then(statistics => this.statistics = statistics);
-    }
-
-    getTime(user_id: number, status_id: number): any {
-        return this.userService.getTime(user_id, status_id)
-            .then(time => this.time = time);
-    }
 
     ngOnInit() {
         // User Token
@@ -146,26 +116,5 @@ export class HomeComponent implements OnInit {
         // });
     }
 
-    // onSelect(userstatus: UserStatuses): void {
-    //     let id = JSON.parse(localStorage.getItem('currentUser')).id;
-    //     this.selectedStatuses = userstatus;
-    //     this.setCurrentUserStatus(id, this.selectedStatuses.status_id).then(() => {
-    //         clearInterval(this.Interval);
-    //         this.getCurrentUserStatus(id).then(() => {
-    //             // Fast filter for array
-    //             let st = this.statistics.status_id;
-    //             this.statistics.status_name = this.userstatuses.filter(function(obj) {
-    //                 return obj.status_id === st;
-    //             })[0].status_name;
-    //
-    //             // Start update user status every X interval
-    //             this.Interval = setInterval(() => {
-    //                 this.updCurrentUserStatus(id, this.statistics.status_id);
-    //             }, 60000);
-    //
-    //         });
-    //         this.getUser(id);
-    //     });
-    // }
 
 }
