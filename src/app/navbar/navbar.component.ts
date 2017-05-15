@@ -8,7 +8,7 @@ import { User } from '../models/user';
 import { Statistics } from '../models/statistics';
 import { UserStatuses} from '../models/userstatuses';
 import { UserService } from '../services/user.service';
-
+import { EventItem, EventService } from '../services/event.service';
 
 @Component({
   selector: 'app-nav',
@@ -23,19 +23,24 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   // User Token
   private token = JSON.parse(localStorage.getItem('currentUser')).token;
+  private addedItem: EventItem;
 
   constructor(
-      private userService: UserService
-  ) { }
+      private userService: UserService,
+      private eventService: EventService
+  ) { eventService.itemAdded$.subscribe(item => this.onItemAdded(item)); }
+
+    private onItemAdded(item: EventItem): void {
+        // do something with added item
+        this.addedItem = item;
+        this.statistics.status_id = this.addedItem.id;
+        this.statistics.status_name = this.addedItem.name;
+    }
 
   // Get current user status
   getCurrentUserStatus(token: string, id: number): any {
     return this.userService.getCurrentUserStatus(token, id)
         .then(statistics => this.statistics = statistics);
-  }
-
-  setStatus(event: object) {
-    console.log(event);
   }
 
   ngOnInit() {

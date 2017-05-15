@@ -12,6 +12,7 @@ import { Time } from '../models/time';
 
 import { AlertService } from '../services/alert.service';
 import { UserService } from '../services/user.service';
+import { EventItem, EventService } from '../services/event.service';
 
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
@@ -29,16 +30,21 @@ export class DashboardComponent implements OnInit, OnDestroy {
     userstatuses: UserStatuses[] = [];
     time: Time;
 
-    @Output() statusEmit: EventEmitter<object> = new EventEmitter<object>();
-
     private Interval: any;
     private statusID: any;
     private token: string;
+    private model: EventItem[];
 
     constructor(
         private userService: UserService,
-        private alertService: AlertService
-    ) { }
+        private alertService: AlertService,
+        private eventService: EventService
+    ) { this.model = eventService.list(); }
+
+    // Add event to list
+    add(id: number, value: string) {
+        this.eventService.add(new EventItem(id, value, false));
+    }
 
     // Get user by token
     getUserByToken(token: string): any {
@@ -132,8 +138,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
                 })[0].status_name;
 
                 // Send status to Nav
-                this.statusEmit.emit({id: this.statistics.status_id, name: this.statistics.status_name});
-                this.alertService.success('Status successful to: ' + this.statistics.status_name, true);
+                this.add(this.statistics.status_id, this.statistics.status_name);
 
                 // Start update user status every X interval
                 this.Interval = setInterval(() => {

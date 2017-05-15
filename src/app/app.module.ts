@@ -9,6 +9,7 @@ import { AppRoutingModule } from './app.routing';
 import { UserService } from './services/user.service';
 import { AuthGuard } from './services/auth.guard';
 import { AlertService } from './services/alert.service';
+import { EventItem, EventService } from './services/event.service';
 
 // Components
 import { AlertComponent } from './alert/alert.component';
@@ -40,6 +41,7 @@ import { NavbarComponent } from './navbar/navbar.component';
     AlertService,
     AuthenticationService,
     UserService,
+    EventService,
   ],
   bootstrap: [ AppComponent ]
 })
