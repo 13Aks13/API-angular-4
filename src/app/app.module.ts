@@ -17,6 +17,7 @@ import { RegisterComponent } from './register/register.component';
 import { AuthenticationService } from './services/authentication.service';
 import { HomeComponent } from './home/home.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { NavbarComponent } from './navbar/navbar.component';
 
 @NgModule({
   imports: [
@@ -31,6 +32,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
     LoginComponent,
     RegisterComponent,
     HomeComponent,
+    NavbarComponent,
     DashboardComponent,
   ],
   providers: [

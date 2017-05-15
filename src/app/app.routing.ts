@@ -12,10 +12,24 @@ import { HomeComponent } from './home/home.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 
 const routes: Routes = [
-    { path: '', component: HomeComponent, canActivate: [AuthGuard] },
+    {
+        path: '',
+        component: HomeComponent,
+        children: [
+            {
+                path: '',
+                redirectTo: '/dashboard',
+                pathMatch: 'full'
+            },
+            {
+                path: 'dashboard',
+                component: DashboardComponent
+            }
+        ],
+        canActivate: [AuthGuard]
+    },
     { path: 'login', component: LoginComponent },
     { path: 'register', component: RegisterComponent },
-    { path: 'dashboard',  component: DashboardComponent },
 
     // otherwise redirect to home
     { path: '**', redirectTo: '' }

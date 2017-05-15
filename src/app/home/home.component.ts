@@ -52,14 +52,8 @@ export class HomeComponent implements OnInit {
             .then(user => this.user = user);
     }
 
-    // Get user statuses
-    getStatuses(token: string): any {
-        return this.userService.getStatuses(token)
-            .then(userstatuses => this.userstatuses = userstatuses);
-    }
-
-    getCurrentUserStatus(id: number): any {
-        return this.userService.getCurrentUserStatus(id)
+    getCurrentUserStatus(token: string, id: number): any {
+        return this.userService.getCurrentUserStatus(token, id)
             .then(statistics => this.statistics = statistics);
     }
 
@@ -80,14 +74,13 @@ export class HomeComponent implements OnInit {
 
     ngOnInit() {
         // User Token
-        const token = JSON.parse(localStorage.getItem('currentUser')).token;
+        // const token = JSON.parse(localStorage.getItem('currentUser')).token;
 
         // Get User
-        this.getUserByToken(token);
+        // this.getUserByToken(token);
 
-        console.log(this.user);
         // Get all statuses
-        this.getStatuses(token);
+        // this.getStatuses(token);
 
 
         // // Get user statuses

@@ -1,44 +1,7 @@
-<nav class="navbar navbar-default">
-    <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="#"><img alt="Brand" width="130px" src="./pic/ysbm_group.png"></a>
-        </div>
-
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav">
-
-            </ul>
-            <ul>
-                <form class="navbar-form navbar-left">
-                    <div class="form-group" *ngIf="user">
-                        <label>Active user: </label>
-                        {{user.name}} {{user.email}}
-                    </div>
-                    <div  class="form-group" *ngIf="statistics">
-                        <label>Status</label>
-                        <span class="badge">{{statistics.status_id}}</span>
-                        <span>{{statistics.status_name}}</span>
-                    </div>
-                </form>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <div class="form-group">
-                    <a [routerLink]="['/login']" class="btn btn-primary btn-lg" role="button">Logout</a>
-                </div>
-            </ul>
-        </div><!-- /.navbar-collapse -->
-    </div><!-- /.container-fluid -->
-</nav>
-
 <div class="row">
+    <div class="col-md-12">
+        <app-nav></app-nav>
+    </div>
     <div class="col-md-3">
         <div class="list-group">
             <a routerLink="/dashboard" class="list-group-item btn btn-info" role="button" routerLinkActive="active">Dashboard</a>
@@ -49,28 +12,12 @@
             <button type="button"  class="list-group-item">Docs</button>
         </div>
     </div>
-    <!-- All statuses inputs -->
-    <div class="col-md-2">
-        <ul class="statuses-group">
-            <li *ngFor="let userstatus of userstatuses" (click)="onSelect(userstatus)"
-                [class.selected]="userstatus === selectedStatuses">
-                <span class="badge">{{userstatus.status_id}}</span>
-                <span>{{userstatus.status_name}}</span>
-            </li>
-        </ul>
-    </div>
-    <!-- All statuses statistic -->
-    <div class="col-md-3">
-        <div class="time-group" *ngIf="user">
-            <button type="button" class="list-group-item" disabled>Total in work: {{user.today}}</button>
-            <button type="button" class="list-group-item" disabled>Offline: {{user.offline}}</button>
-            <button type="button" class="list-group-item" disabled>Checkin: {{user.checkin}}</button>
-            <button type="button" class="list-group-item" disabled>Lunche: {{user.lunche}}</button>
-            <button type="button" class="list-group-item" disabled>Brake: {{user.brake}}</button>
-            <button type="button" class="list-group-item" disabled>Call: {{user.call}}</button>
-        </div>
+    <div class="col-md-9">
+       <router-outlet></router-outlet>
     </div>
 </div>
+
+
 
 
 

@@ -1,6 +1,7 @@
 /**
  * Created by Andrew K. on 13.05.17.
  */
+
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
@@ -21,6 +22,16 @@ import * as moment from 'moment/moment';
     styleUrls: [ './dashboard.component.css' ]
 })
 export class DashboardComponent implements OnInit {
+
+    userstatuses: UserStatuses[] = [];
+    time: Time;
+
+    private Interval: any;
+    private statusID: any;
+
+    constructor(
+        private userService: UserService
+    ) { }
 
     ngOnInit(): void {
 

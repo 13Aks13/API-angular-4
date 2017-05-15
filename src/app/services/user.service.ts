@@ -26,6 +26,7 @@ export class UserService {
     private registerUrl = 'register';
     private usersUrl = 'users';
     private statusUrl = 'status';
+    private statusnameUrl = 'statusname';
     private statusesUrl = 'statuses';
     private timeUrl = 'time';
 
@@ -53,10 +54,10 @@ export class UserService {
         const url = `${this.domain}${this.usersUrl}/me?token=${token}`;
 
         // get user by token
-         return this.http.get(url)
-             .toPromise()
-             .then(response => response.json().data as User)
-             .catch(this.handleError);
+        return this.http.get(url)
+            .toPromise()
+            .then(response => response.json().data as User)
+            .catch(this.handleError);
     }
 
     getUser(id: number): Promise<User> {
@@ -95,14 +96,11 @@ export class UserService {
             .catch(this.handleError);
     }
 
-    getCurrentUserStatus(user_id: number): Promise<Statistics> {
-        // add authorization header with jwt token
-        const headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token });
-        const options = new RequestOptions({ headers: headers });
-        const url = `${this.domain}${this.statusUrl}?user_id=${user_id}` ;
+    getCurrentUserStatus(token: string, user_id: number): Promise<Statistics> {
+        const url = `${this.domain}${this.statusUrl}?token=${token}&user_id=${user_id}` ;
 
         // get user current status from Statistic
-        return this.http.get(url, options)
+        return this.http.get(url)
             .toPromise()
             .then(response => response.json().data as Statistics)
             .catch(this.handleError);
@@ -143,6 +141,16 @@ export class UserService {
         return this.http.post(url, { user_id: user_id, status_id: status_id, 'start': start, 'end': end }, options)
             .toPromise()
             .then(response => (response.json() as Time))
+            .catch(this.handleError);
+    }
+
+    getStatusName(token: string, id: number): Promise<UserStatuses> {
+        const url = `${this.domain}${this.statusnameUrl}?token=${token}&id=${id}` ;
+
+        // get user current status from Statistic
+        return this.http.get(url)
+            .toPromise()
+            .then(response => response.json().data as UserStatuses)
             .catch(this.handleError);
     }
 
