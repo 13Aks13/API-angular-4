@@ -123,22 +123,24 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     onSelect(userstatus: UserStatuses): void {
         this.selectedStatuses = userstatus;
-        // Set current status for user
-        this.setCurrentUserStatus(this.user.id, this.selectedStatuses.status_id).then(() => {
-            clearInterval(this.Interval);
-            this.getCurrentUserStatus(this.token, this.user.id).then(() => {
-                // Fast filter for array
-                const st = this.statistics.status_id;
-                this.statistics.status_name = this.userstatuses.filter(function(obj) {
-                    return obj.status_id === st;
-                })[0].status_name;
+        if (this.statistics.status_id !== this.selectedStatuses.status_id) {
 
-                // Send status to Nav
-                this.add(this.statistics.status_id, this.statistics.status_name);
+            // Set current status for user
+            this.setCurrentUserStatus(this.user.id, this.selectedStatuses.status_id).then(() => {
+                clearInterval(this.Interval);
+                this.getCurrentUserStatus(this.token, this.user.id).then(() => {
+                    // Fast filter for array
+                    const st = this.statistics.status_id;
+                    this.statistics.status_name = this.userstatuses.filter(function (obj) {
+                        return obj.status_id === st;
+                    })[0].status_name;
 
-                // Start update user status every X interval
-                this.Interval = setInterval(() => {
-                    this.updCurrentUserStatus(this.user.id, this.statistics.status_id);
+                    // Send status to Nav
+                    this.add(this.statistics.status_id, this.statistics.status_name);
+
+                    // Start update user status every X interval
+                    this.Interval = setInterval(() => {
+                        this.updCurrentUserStatus(this.user.id, this.statistics.status_id);
                         for (let i = 0; i < this.userstatuses.length; i++) {
                             this.getTime(this.user.id, this.userstatuses[i].status_id)
                                 .then(() => {
@@ -157,10 +159,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
                                     // console.log(this.user);
                                 });
                         }
-                }, 5000);
+                    }, 5000);
 
+                });
             });
-        });
+        }
     }
 
 }

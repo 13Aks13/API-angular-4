@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app.routing';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 
 // Services
 import { UserService } from './services/user.service';
@@ -19,6 +21,7 @@ import { AuthenticationService } from './services/authentication.service';
 import { HomeComponent } from './home/home.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { NavbarComponent } from './navbar/navbar.component';
+import { DailyReportComponent } from './dailyreport/dailyreport.component';
 
 @NgModule({
   imports: [
@@ -26,6 +29,7 @@ import { NavbarComponent } from './navbar/navbar.component';
     FormsModule,
     HttpModule,
     AppRoutingModule,
+    BrowserAnimationsModule,
   ],
   declarations: [
     AppComponent,
@@ -35,6 +39,7 @@ import { NavbarComponent } from './navbar/navbar.component';
     HomeComponent,
     NavbarComponent,
     DashboardComponent,
+    DailyReportComponent,
   ],
   providers: [
     AuthGuard,
