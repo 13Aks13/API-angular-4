@@ -30,12 +30,12 @@ export class NavbarComponent implements OnInit, OnDestroy {
       private eventService: EventService
   ) { eventService.itemAdded$.subscribe(item => this.onItemAdded(item)); }
 
-    private onItemAdded(item: EventItem): void {
-        // do something with added item
-        this.addedItem = item;
-        this.statistics.status_id = this.addedItem.id;
-        this.statistics.status_name = this.addedItem.name;
-    }
+  private onItemAdded(item: EventItem): void {
+      // do something with added item
+      this.addedItem = item;
+      this.statistics.status_id = this.addedItem.id;
+      this.statistics.status_name = this.addedItem.name;
+  }
 
   // Get current user status
   getCurrentUserStatus(token: string, id: number): any {

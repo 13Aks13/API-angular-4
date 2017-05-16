@@ -4,6 +4,7 @@
 
 export class UserStatuses {
     status_id: any;
+    parent_id: any;
     status_name: string;
     status_color: string;
 }

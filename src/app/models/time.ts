@@ -4,5 +4,6 @@
 
 export class Time {
     status_id: any;
+    parent_id: any;
     seconds: any;
 }

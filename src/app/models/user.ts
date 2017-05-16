@@ -5,11 +5,8 @@ export class User {
     avatar: any;
     goal: any;
     today: any;
-    offline: any;
-    checkin: any;
-    lunche: any;
     brake: any;
-    call: any;
+    lunch: any;
     week: any;
     month: any;
     quatter: any;

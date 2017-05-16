@@ -101,15 +101,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
                             this.getTime(this.user.id, this.userstatuses[i].status_id)
                                 .then(() => {
                                     switch (this.time.status_id) {
-                                        case 1: this.user.offline =  this.time.seconds;
+                                        case 2:  this.user.today =  this.time.seconds;
                                             break;
-                                        case 2:  this.user.checkin =  this.time.seconds;
+                                        case 3:  this.user.brake =  this.time.seconds;
                                             break;
-                                        case 3: this.user.lunche =  this.time.seconds;
-                                            break;
-                                        case 4: this.user.brake =  this.time.seconds;
-                                            break;
-                                        case 5: this.user.call =  this.time.seconds;
+                                        case 4:  this.user.lunch =  this.time.seconds;
                                             break;
                                     }
                                     // console.log(this.time);
@@ -117,7 +113,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
                         }
                     });
                 });
-            }, 60000);
+            }, 5000);
         });
     }
 
@@ -147,22 +143,21 @@ export class DashboardComponent implements OnInit, OnDestroy {
                             this.getTime(this.user.id, this.userstatuses[i].status_id)
                                 .then(() => {
                                     switch (this.time.status_id) {
-                                        case 1: this.user.offline =  this.time.seconds;
-                                          break;
-                                        case 2:  this.user.checkin =  this.time.seconds;
+                                        case 2:
+                                            this.user.today = this.time.seconds;
                                             break;
-                                        case 3: this.user.lunche =  this.time.seconds;
+                                        case 3:
+                                            this.user.brake = this.time.seconds;
                                             break;
-                                        case 4: this.user.brake =  this.time.seconds;
+                                        case 4:
+                                            this.user.lunch = this.time.seconds;
                                             break;
-                                        case 5: this.user.call =  this.time.seconds;
-                                            break;
-                                       }
+                                    }
                                     // console.log(this.time);
                                     // console.log(this.user);
                                 });
                         }
-                }, 60000);
+                }, 5000);
 
             });
         });

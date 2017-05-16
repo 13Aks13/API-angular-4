@@ -21,15 +21,15 @@ import { Time } from '../models/time';
 export class UserService {
 
     // URL to web api
-    private domain = 'http://ws.dev/';
-    // private domain = 'http://wsapi.test-y-sbm.com/';
+    private domain = this.authenticationService.domain;
     private registerUrl = 'register';
     private usersUrl = 'users';
     private statusUrl = 'status';
     private statusnameUrl = 'statusname';
     private statusesUrl = 'statuses';
     private timeUrl = 'time';
-
+    private childUrl = 'child';
+    private timeallUrl = 'timeall';
 
     constructor(
         private http: Http,
@@ -154,4 +154,27 @@ export class UserService {
             .catch(this.handleError);
     }
 
+    getChildStatuses(token: string, status_id: number): Promise<any> {
+        const url = `${this.domain}${this.childUrl}?token=${token}&id=${status_id}` ;
+
+        // get user current status from Statistic
+        return this.http.get(url)
+            .toPromise()
+            .then(response => response.json())
+            .catch(this.handleError);
+    }
+
+    getTimeForAll(user_id: number, status_id: object): Promise<any> {
+        const headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token });
+        const options = new RequestOptions({ headers: headers });
+        const url = `${this.domain}${this.timeallUrl}`;
+
+        const start =  moment().format('YYYY-MM-DD') + ' ' + '00:00:00' ;
+        const end = moment().format('YYYY-MM-DD') + ' ' + '23:59:59';
+
+        return this.http.post(url, { user_id: user_id, status_id: status_id, 'start': start, 'end': end }, options)
+            .toPromise()
+            .then(response => (response.json() as Time))
+            .catch(this.handleError);
+    }
 }
