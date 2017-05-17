@@ -45,7 +45,7 @@ export class DailyReportComponent implements OnInit {
   ngOnInit() { }
 
   save() {
-      this.token = JSON.parse(localStorage.getItem('currentUser')).token;
+     this.token = JSON.parse(localStorage.getItem('currentUser')).token;
      // Get user by token
      this.userService.getUserByToken(this.token).then((user) => {
          this.user = user;
@@ -55,7 +55,6 @@ export class DailyReportComponent implements OnInit {
             console.log(this.dailyreport);
          });
      });
-     console.log(this.model.report);
      this.visible = false;
      this.visibleChange.emit(this.visible);
   }

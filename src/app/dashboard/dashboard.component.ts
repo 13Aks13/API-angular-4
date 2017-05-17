@@ -2,8 +2,7 @@
  * Created by Andrew K. on 13.05.17.
  */
 
-import { Component, OnInit, OnDestroy, EventEmitter, Output } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import { User } from '../models/user';
 import { Statistics } from '../models/statistics';
@@ -97,6 +96,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
                 // Get user status
                 this.getCurrentUserStatus(this.token, this.user.id).then((statistics) => {
                     this.statistics = statistics;
+                    this.statisticsService.updCurrentUserStatus(this.user.id, this.statistics.status_id).then((response) => {
+                        console.log('User status: ' + this.statistics.status_id);
+                    });
                 });
             });
 
@@ -123,7 +125,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
                         }
                     });
                 });
-            }, 5000);
+            }, 10000);
         });
     }
 
@@ -131,7 +133,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
         clearInterval(this.Interval);
     }
 
-    onSelect(userstatus: UserStatuses, ): void {
+    onSelect(userstatus: UserStatuses): void {
+        this.token = JSON.parse(localStorage.getItem('currentUser')).token;
         this.selectedStatuses = userstatus;
         if (this.statistics.status_id !== this.selectedStatuses.status_id) {
             // Dialog for Daily Report
@@ -144,6 +147,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
             // Set current status for user
             this.setCurrentUserStatus(this.user.id, this.selectedStatuses.status_id).then(() => {
                 clearInterval(this.Interval);
+                console.log('Kill Interval');
                 this.getCurrentUserStatus(this.token, this.user.id).then(() => {
                     // Fast filter for array
                     const st = this.statistics.status_id;
@@ -175,7 +179,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
                                 // console.log(this.user);
                             });
                         }
-                    }, 5000);
+                    }, 10000);
                 });
             });
         }

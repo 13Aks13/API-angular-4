@@ -13,6 +13,7 @@ import { AlertService } from './services/alert.service';
 import { UserService } from './services/user.service';
 import { StatisticsService } from './services/statistics.service';
 import { DailyreportService } from './services/dailyreport.service';
+import { RtreportService } from './services/rtreport.service';
 import { EventItem, EventService } from './services/event.service';
 
 // Components
@@ -25,6 +26,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { DailyReportComponent } from './dailyreport/dailyreport.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { RtreportComponent } from './rtreport/rtreport.component';
 
 @NgModule({
   imports: [
@@ -44,6 +46,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
     DashboardComponent,
     DailyReportComponent,
     PageNotFoundComponent,
+    RtreportComponent,
   ],
   providers: [
     AuthGuard,
@@ -52,6 +55,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
     UserService,
     StatisticsService,
     DailyreportService,
+    RtreportService,
     EventService,
   ],
   bootstrap: [ AppComponent ]
