@@ -8,6 +8,7 @@ import { User } from '../models/user';
 import { Statistics } from '../models/statistics';
 import { UserStatuses} from '../models/userstatuses';
 import { UserService } from '../services/user.service';
+import { StatisticsService } from '../services/statistics.service';
 import { EventItem, EventService } from '../services/event.service';
 
 @Component({
@@ -27,19 +28,21 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   constructor(
       private userService: UserService,
+      private statisticsService: StatisticsService,
       private eventService: EventService
   ) { eventService.itemAdded$.subscribe(item => this.onItemAdded(item)); }
 
   private onItemAdded(item: EventItem): void {
       // do something with added item
       this.addedItem = item;
+      console.log(item);
       this.statistics.status_id = this.addedItem.id;
       this.statistics.status_name = this.addedItem.name;
   }
 
   // Get current user status
   getCurrentUserStatus(token: string, id: number): any {
-    return this.userService.getCurrentUserStatus(token, id)
+    return this.statisticsService.getCurrentUserStatus(token, id)
         .then(statistics => this.statistics = statistics);
   }
 
@@ -48,10 +51,10 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.userService.getUserByToken(this.token).then( (user) => {
         this.user = user;
         // Get current user status
-        this.userService.getCurrentUserStatus(this.token, this.user.id).then((statistics) => {
+        this.statisticsService.getCurrentUserStatus(this.token, this.user.id).then((statistics) => {
             this.statistics = statistics;
             // Get status name
-            this.userService.getStatusName(this.token, this.statistics.status_id).then((userstatuses) => {
+            this.statisticsService.getStatusName(this.token, this.statistics.status_id).then((userstatuses) => {
                 this.userstatuses = userstatuses;
                 this.statistics.status_name = this.userstatuses.status_name;
             });

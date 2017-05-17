@@ -1,11 +1,11 @@
 <div [@dialog] *ngIf="visible" class="dialog">
-  <div class="form-group">
-      <label for="report">Report:</label>
-      <textarea class="form-control" [(ngModel)]="model.report" rows="10" id="report"></textarea>
-  </div>
-  <div>
-      <button (click)="save()">Save</button>
-      <button (click)="close()">Close</button>
-  </div>
+    <div class="form-group">
+        <label for="report">Report:</label>
+        <textarea class="form-control" [(ngModel)]="model.report" rows="10" id="report"></textarea>
+    </div>
+    <div class="form-group">
+        <button class="btn btn-default" (click)="save()">Save</button>
+        <button class="btn btn-default" (click)="close()">Close</button>
+    </div>
 </div>
 <div *ngIf="visible" class="overlay" (click)="close()"></div>

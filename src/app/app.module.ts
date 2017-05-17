@@ -9,6 +9,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 // Services
 import { UserService } from './services/user.service';
+import { StatisticsService } from './services/statistics.service';
 import { AuthGuard } from './services/auth.guard';
 import { AlertService } from './services/alert.service';
 import { EventItem, EventService } from './services/event.service';
@@ -46,6 +47,7 @@ import { DailyReportComponent } from './dailyreport/dailyreport.component';
     AlertService,
     AuthenticationService,
     UserService,
+    StatisticsService,
     EventService,
   ],
   bootstrap: [ AppComponent ]

@@ -1,7 +1,7 @@
 <div class="row">
     <!-- All statuses inputs -->
     <div class="col-md-3">
-        <button (click)="showDialog = !showDialog" class="btn">Open</button>
+        <button (click)="showDialog = !showDialog" class="btn">x</button>
         <app-dialog [(visible)]="showDialog"></app-dialog>
         <ul class="statuses-group">
             <li *ngFor="let userstatus of userstatuses" (click)="onSelect(userstatus)"

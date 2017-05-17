@@ -29,7 +29,7 @@ export class DailyReportComponent implements OnInit {
   ngOnInit() { }
 
   save() {
-    console.log(this.model.report);
+     console.log(this.model.report);
      this.visible = false;
      this.visibleChange.emit(this.visible);
   }
