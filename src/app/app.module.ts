@@ -8,10 +8,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
 // Services
-import { UserService } from './services/user.service';
-import { StatisticsService } from './services/statistics.service';
 import { AuthGuard } from './services/auth.guard';
 import { AlertService } from './services/alert.service';
+import { UserService } from './services/user.service';
+import { StatisticsService } from './services/statistics.service';
+import { DailyreportService } from './services/dailyreport.service';
 import { EventItem, EventService } from './services/event.service';
 
 // Components
@@ -23,6 +24,7 @@ import { HomeComponent } from './home/home.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { DailyReportComponent } from './dailyreport/dailyreport.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 @NgModule({
   imports: [
@@ -41,6 +43,7 @@ import { DailyReportComponent } from './dailyreport/dailyreport.component';
     NavbarComponent,
     DashboardComponent,
     DailyReportComponent,
+    PageNotFoundComponent,
   ],
   providers: [
     AuthGuard,
@@ -48,6 +51,7 @@ import { DailyReportComponent } from './dailyreport/dailyreport.component';
     AuthenticationService,
     UserService,
     StatisticsService,
+    DailyreportService,
     EventService,
   ],
   bootstrap: [ AppComponent ]

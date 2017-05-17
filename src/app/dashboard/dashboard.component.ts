@@ -30,9 +30,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
     selectedStatuses: UserStatuses;
     userstatuses: UserStatuses[] = [];
     time: Time;
+    showDialog = false;
 
     private Interval: any;
-    private statusID: any;
     private token: string;
     private model: EventItem[];
 
@@ -131,9 +131,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
         clearInterval(this.Interval);
     }
 
-    onSelect(userstatus: UserStatuses): void {
+    onSelect(userstatus: UserStatuses, ): void {
         this.selectedStatuses = userstatus;
         if (this.statistics.status_id !== this.selectedStatuses.status_id) {
+            // Dialog for Daily Report
+            if (this.selectedStatuses.status_id === 1) {
+                this.showDialog = true;
+            } else {
+                this.showDialog = false;
+            }
+
             // Set current status for user
             this.setCurrentUserStatus(this.user.id, this.selectedStatuses.status_id).then(() => {
                 clearInterval(this.Interval);

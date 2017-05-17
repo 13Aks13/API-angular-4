@@ -17,7 +17,7 @@ import { User } from '../models/user';
 @Injectable()
 export class UserService {
 
-    // URL to web api
+    // URLs to web api
     private domain = this.authenticationService.domain;
     private registerUrl = 'register';
     private usersUrl = 'users';

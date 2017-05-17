@@ -1,6 +1,14 @@
 import { Component, OnInit, Input, Output, OnChanges, EventEmitter } from '@angular/core';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 
+// Service
+import { DailyreportService } from '../services/dailyreport.service';
+import { UserService } from '../services/user.service';
+
+// Models
+import { DailyReport } from '../models/dailyreport';
+import { User } from '../models/user';
+
 @Component({
   selector: 'app-dialog',
   templateUrl: './dailyreport.component.html',
@@ -20,15 +28,33 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
 export class DailyReportComponent implements OnInit {
   model: any = {};
 
+  user: User;
+  dailyreport: DailyReport;
+
+  private token: string;
+
   @Input() closable = true;
   @Input() visible: boolean;
   @Output() visibleChange: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-  constructor() { }
+  constructor(
+      private dailyReport: DailyreportService,
+      private userService: UserService
+  ) { }
 
   ngOnInit() { }
 
   save() {
+      this.token = JSON.parse(localStorage.getItem('currentUser')).token;
+     // Get user by token
+     this.userService.getUserByToken(this.token).then((user) => {
+         this.user = user;
+         // Save report to DB
+         this.dailyReport.storeDailyReport(this.user.id, 0, this.model.report).then((dailyreport) => {
+            this.dailyreport = dailyreport;
+            console.log(this.dailyreport);
+         });
+     });
      console.log(this.model.report);
      this.visible = false;
      this.visibleChange.emit(this.visible);

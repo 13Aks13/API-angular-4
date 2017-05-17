@@ -18,6 +18,7 @@ import { Time } from '../models/time';
 @Injectable()
 export class StatisticsService {
 
+    // URLs to web api
     private domain = this.authenticationService.domain;
     private statusUrl = 'status';
     private statusnameUrl = 'statusname';
@@ -35,7 +36,6 @@ export class StatisticsService {
         console.error('An error occurred', error);
         return Promise.reject(error.message || error);
     }
-
 
     getStatuses(token: string): Promise<UserStatuses[]> {
         const url = `${this.domain}${this.statusesUrl}?token=${token}`;

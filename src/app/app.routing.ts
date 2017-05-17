@@ -10,6 +10,7 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { HomeComponent } from './home/home.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 const routes: Routes = [
     {
@@ -32,7 +33,9 @@ const routes: Routes = [
     { path: 'register', component: RegisterComponent },
 
     // otherwise redirect to home
-    { path: '**', redirectTo: '' }
+    // { path: '**', redirectTo: '' },
+    { path: '404', component: PageNotFoundComponent  },
+    { path: '**',    redirectTo: '/404'  }
 ];
 
 @NgModule({
