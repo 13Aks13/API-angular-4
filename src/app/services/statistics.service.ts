@@ -39,7 +39,6 @@ export class StatisticsService {
 
     getStatuses(token: string): Promise<UserStatuses[]> {
         const url = `${this.domain}${this.statusesUrl}?token=${token}`;
-
         // get user statuses from api
         return this.http.get(url)
             .toPromise()
@@ -49,7 +48,6 @@ export class StatisticsService {
 
     getCurrentUserStatus(token: string, user_id: number): Promise<Statistics> {
         const url = `${this.domain}${this.statusUrl}?token=${token}&user_id=${user_id}` ;
-
         // get user current status from Statistic
         return this.http.get(url)
             .toPromise()
@@ -58,42 +56,36 @@ export class StatisticsService {
     }
 
     setCurrentUserStatus(user_id: number, status_id: number): Promise<Statistics> {
-        // const headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token });
-        // const options = new RequestOptions({ headers: headers });
-        const url = `${this.domain}${this.statusUrl}?token=${this.authenticationService.token}`;
-
+        const headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token });
+        const options = new RequestOptions({ headers: headers });
+        const url = `${this.domain}${this.statusUrl}`;
         // set user statuses for api
-        // return this.http.post(url, { user_id: user_id, status_id: status_id }, options)
-        return this.http.post(url, { user_id: user_id, status_id: status_id })
+        return this.http.post(url, { user_id: user_id, status_id: status_id }, options)
             .toPromise()
             .then(response => response.json().data as Statistics)
             .catch(this.handleError);
     }
 
     updCurrentUserStatus(user_id: number, status_id: number): Promise<Statistics> {
-        // const headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token });
-        // const options = new RequestOptions({ headers: headers });
-
-        const url = `${this.domain}${this.statusUrl}?token=${this.authenticationService.token}`;
-
+        const headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token });
+        const options = new RequestOptions({ headers: headers });
+        const url = `${this.domain}${this.statusUrl}`;
         // set user statuses for api
-        // return this.http.put(url, { user_id: user_id, status_id: status_id }, options)
-        return this.http.put(url, { user_id: user_id, status_id: status_id })
+        return this.http.put(url, { user_id: user_id, status_id: status_id }, options)
             .toPromise()
             .then(response => response.json().data as Statistics)
             .catch(this.handleError);
     }
 
     getTime(user_id: number, status_id: number): Promise<Time> {
-        // const headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token });
-        // const options = new RequestOptions({ headers: headers });
-        const url = `${this.domain}${this.timeUrl}?token=${this.authenticationService.token}`;
+        const headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token });
+        const options = new RequestOptions({ headers: headers });
+        const url = `${this.domain}${this.timeUrl}`;
 
         const start =  moment().format('YYYY-MM-DD') + ' ' + '00:00:00' ;
         const end = moment().format('YYYY-MM-DD') + ' ' + '23:59:59';
 
-        // return this.http.post(url, { user_id: user_id, status_id: status_id, 'start': start, 'end': end }, options)
-        return this.http.post(url, { user_id: user_id, status_id: status_id, 'start': start, 'end': end })
+        return this.http.post(url, { user_id: user_id, status_id: status_id, 'start': start, 'end': end }, options)
             .toPromise()
             .then(response => (response.json() as Time))
             .catch(this.handleError);
@@ -101,7 +93,6 @@ export class StatisticsService {
 
     getStatusName(token: string, id: number): Promise<UserStatuses> {
         const url = `${this.domain}${this.statusnameUrl}?token=${token}&id=${id}` ;
-
         // get user current status from Statistic
         return this.http.get(url)
             .toPromise()
@@ -111,7 +102,6 @@ export class StatisticsService {
 
     getChildStatuses(token: string, status_id: number): Promise<any> {
         const url = `${this.domain}${this.childUrl}?token=${token}&id=${status_id}` ;
-
         // get user current status from Statistic
         return this.http.get(url)
             .toPromise()
@@ -120,15 +110,14 @@ export class StatisticsService {
     }
 
     getTimeForAll(user_id: number, status_id: object): Promise<any> {
-        // const headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token });
-        // const options = new RequestOptions({ headers: headers });
-        const url = `${this.domain}${this.timeallUrl}?token=${this.authenticationService.token}`;
+        const headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token });
+        const options = new RequestOptions({ headers: headers });
+        const url = `${this.domain}${this.timeallUrl}`;
 
         const start =  moment().format('YYYY-MM-DD') + ' ' + '00:00:00' ;
         const end = moment().format('YYYY-MM-DD') + ' ' + '23:59:59';
 
-        // return this.http.post(url, { user_id: user_id, status_id: status_id, 'start': start, 'end': end }, options)
-        return this.http.post(url, { user_id: user_id, status_id: status_id, 'start': start, 'end': end })
+        return this.http.post(url, { user_id: user_id, status_id: status_id, 'start': start, 'end': end }, options)
             .toPromise()
             .then(response => (response.json() as Time))
             .catch(this.handleError);

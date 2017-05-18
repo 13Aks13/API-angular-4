@@ -28,4 +28,6 @@ export class RtreportComponent implements OnInit {
         clearInterval(this.Interval);
     }
 
+
+
 }
