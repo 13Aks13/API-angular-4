@@ -93,6 +93,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
             // Get current user
             this.userService.getUserByToken(this.token).then((user) => {
                 this.user = user;
+                console.log('User' + this.user);
                 // Get user status
                 this.getCurrentUserStatus(this.token, this.user.id).then((statistics) => {
                     this.statistics = statistics;
@@ -125,7 +126,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
                         }
                     });
                 });
-            }, 10000);
+            }, 5000);
         });
     }
 
@@ -179,7 +180,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
                                 // console.log(this.user);
                             });
                         }
-                    }, 10000);
+                    }, 5000);
                 });
             });
         }

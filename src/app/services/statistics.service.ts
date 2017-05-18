@@ -58,38 +58,42 @@ export class StatisticsService {
     }
 
     setCurrentUserStatus(user_id: number, status_id: number): Promise<Statistics> {
-        const headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token });
-        const options = new RequestOptions({ headers: headers });
-        const url = `${this.domain}${this.statusUrl}`;
+        // const headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token });
+        // const options = new RequestOptions({ headers: headers });
+        const url = `${this.domain}${this.statusUrl}?token=${this.authenticationService.token}`;
 
         // set user statuses for api
-        return this.http.post(url, { user_id: user_id, status_id: status_id }, options)
+        // return this.http.post(url, { user_id: user_id, status_id: status_id }, options)
+        return this.http.post(url, { user_id: user_id, status_id: status_id })
             .toPromise()
             .then(response => response.json().data as Statistics)
             .catch(this.handleError);
     }
 
     updCurrentUserStatus(user_id: number, status_id: number): Promise<Statistics> {
-        const headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token });
-        const options = new RequestOptions({ headers: headers });
-        const url = `${this.domain}${this.statusUrl}`;
+        // const headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token });
+        // const options = new RequestOptions({ headers: headers });
+
+        const url = `${this.domain}${this.statusUrl}?token=${this.authenticationService.token}`;
 
         // set user statuses for api
-        return this.http.put(url, { user_id: user_id, status_id: status_id }, options)
+        // return this.http.put(url, { user_id: user_id, status_id: status_id }, options)
+        return this.http.put(url, { user_id: user_id, status_id: status_id })
             .toPromise()
             .then(response => response.json().data as Statistics)
             .catch(this.handleError);
     }
 
     getTime(user_id: number, status_id: number): Promise<Time> {
-        const headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token });
-        const options = new RequestOptions({ headers: headers });
-        const url = `${this.domain}${this.timeUrl}`;
+        // const headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token });
+        // const options = new RequestOptions({ headers: headers });
+        const url = `${this.domain}${this.timeUrl}?token=${this.authenticationService.token}`;
 
         const start =  moment().format('YYYY-MM-DD') + ' ' + '00:00:00' ;
         const end = moment().format('YYYY-MM-DD') + ' ' + '23:59:59';
 
-        return this.http.post(url, { user_id: user_id, status_id: status_id, 'start': start, 'end': end }, options)
+        // return this.http.post(url, { user_id: user_id, status_id: status_id, 'start': start, 'end': end }, options)
+        return this.http.post(url, { user_id: user_id, status_id: status_id, 'start': start, 'end': end })
             .toPromise()
             .then(response => (response.json() as Time))
             .catch(this.handleError);
@@ -116,14 +120,15 @@ export class StatisticsService {
     }
 
     getTimeForAll(user_id: number, status_id: object): Promise<any> {
-        const headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token });
-        const options = new RequestOptions({ headers: headers });
-        const url = `${this.domain}${this.timeallUrl}`;
+        // const headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token });
+        // const options = new RequestOptions({ headers: headers });
+        const url = `${this.domain}${this.timeallUrl}?token=${this.authenticationService.token}`;
 
         const start =  moment().format('YYYY-MM-DD') + ' ' + '00:00:00' ;
         const end = moment().format('YYYY-MM-DD') + ' ' + '23:59:59';
 
-        return this.http.post(url, { user_id: user_id, status_id: status_id, 'start': start, 'end': end }, options)
+        // return this.http.post(url, { user_id: user_id, status_id: status_id, 'start': start, 'end': end }, options)
+        return this.http.post(url, { user_id: user_id, status_id: status_id, 'start': start, 'end': end })
             .toPromise()
             .then(response => (response.json() as Time))
             .catch(this.handleError);

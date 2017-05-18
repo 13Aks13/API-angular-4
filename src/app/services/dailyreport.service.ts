@@ -27,11 +27,12 @@ export class DailyreportService {
     }
 
     storeDailyReport(user_id: number, task_id: number, report: any): Promise<DailyReport> {
-        const headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token });
-        const options = new RequestOptions({ headers: headers });
-        const url = `${this.domain}${this.reportUrl}`;
+        // const headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token });
+        // const options = new RequestOptions({ headers: headers });
+        const url = `${this.domain}${this.reportUrl}?token=${this.authenticationService.token}`;
 
-        return this.http.post(url, { user_id: user_id, report: report}, options)
+        // return this.http.post(url, { user_id: user_id, report: report}, options)
+        return this.http.post(url, { user_id: user_id, report: report})
             .toPromise()
             .then(response => (response.json() as DailyReport))
             .catch(this.handleError);
