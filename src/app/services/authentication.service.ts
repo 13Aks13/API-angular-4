@@ -16,8 +16,8 @@ export class AuthenticationService {
     public token: string;
 
     // URL to web api
-    // public domain = 'http://ws.dev/';
-    public domain = 'http://wsapi.test-y-sbm.com/';
+    public domain = 'http://ws.dev/';
+    // public domain = 'http://wsapi.test-y-sbm.com/';
     private loginUrl = 'login';
 
     constructor(private http: Http) {

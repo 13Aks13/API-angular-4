@@ -10,6 +10,7 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { HomeComponent } from './home/home.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { PolicyComponent } from './policy/policy.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 const routes: Routes = [
@@ -25,6 +26,10 @@ const routes: Routes = [
             {
                 path: 'dashboard',
                 component: DashboardComponent
+            },
+            {
+                path: 'policy',
+                component: PolicyComponent
             }
         ],
         canActivate: [AuthGuard],

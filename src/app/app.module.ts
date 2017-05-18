@@ -27,6 +27,8 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { DailyReportComponent } from './dailyreport/dailyreport.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { RtreportComponent } from './rtreport/rtreport.component';
+import { PolicyComponent } from './policy/policy.component';
+import { SafePipe } from './pipe/safe.pipe';
 
 @NgModule({
   imports: [
@@ -37,6 +39,7 @@ import { RtreportComponent } from './rtreport/rtreport.component';
     BrowserAnimationsModule,
   ],
   declarations: [
+    SafePipe,
     AppComponent,
     AlertComponent,
     LoginComponent,
@@ -47,6 +50,7 @@ import { RtreportComponent } from './rtreport/rtreport.component';
     DailyReportComponent,
     PageNotFoundComponent,
     RtreportComponent,
+    PolicyComponent,
   ],
   providers: [
     AuthGuard,
