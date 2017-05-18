@@ -5,7 +5,7 @@ import { HttpModule } from '@angular/http';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app.routing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
 // Services
 import { AuthGuard } from './services/auth.guard';
@@ -37,6 +37,7 @@ import { SafePipe } from './pipe/safe.pipe';
     HttpModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    NgxDatatableModule,
   ],
   declarations: [
     SafePipe,

@@ -13,6 +13,8 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { PolicyComponent } from './policy/policy.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
+import { RtreportComponent } from './rtreport/rtreport.component';
+
 const routes: Routes = [
     {
         path: '',
@@ -30,6 +32,10 @@ const routes: Routes = [
             {
                 path: 'policy',
                 component: PolicyComponent
+            },
+            {
+                path: 'realtime',
+                component: RtreportComponent
             }
         ],
         canActivate: [AuthGuard],
