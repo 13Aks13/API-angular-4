@@ -10,6 +10,7 @@ import { UserStatuses } from '../models/userstatuses';
 import { Time } from '../models/time';
 
 import { AlertService } from '../services/alert.service';
+import { AuthenticationService } from '../services/authentication.service';
 import { UserService } from '../services/user.service';
 import { StatisticsService } from '../services/statistics.service';
 import { EventItem, EventService } from '../services/event.service';
@@ -36,11 +37,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private model: EventItem[];
 
     constructor(
+        private alertService: AlertService,
+        private authenticationService: AuthenticationService,
         private userService: UserService,
         private statisticsService: StatisticsService,
-        private alertService: AlertService,
         private eventService: EventService
-    ) { this.model = eventService.list(); }
+    ) {
+        this.model = eventService.list();
+    }
 
     // Add event to list
     add(id: number, value: string) {
@@ -85,7 +89,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
 
     ngOnInit(): void {
-        this.token = JSON.parse(localStorage.getItem('currentUser')).token;
+        this.token = this.authenticationService.token;
 
         // Get all valid statuses
         this.statisticsService.getStatuses(this.token).then((userstatuses) => {
@@ -93,7 +97,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
             // Get current user
             this.userService.getUserByToken(this.token).then((user) => {
                 this.user = user;
-                console.log('User' + this.user);
+                // console.log('User' + this.user);
                 // Get user status
                 this.getCurrentUserStatus(this.token, this.user.id).then((statistics) => {
                     this.statistics = statistics;
@@ -135,7 +139,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
 
     onSelect(userstatus: UserStatuses): void {
-        this.token = JSON.parse(localStorage.getItem('currentUser')).token;
+        // this.token = JSON.parse(localStorage.getItem('currentUser')).token;
         this.selectedStatuses = userstatus;
         if (this.statistics.status_id !== this.selectedStatuses.status_id) {
             // Dialog for Daily Report
@@ -152,7 +156,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
                 this.getCurrentUserStatus(this.token, this.user.id).then(() => {
                     // Fast filter for array
                     const st = this.statistics.status_id;
-                    this.statistics.status_name = this.userstatuses.filter(function (obj) {
+                    this.statistics.status_name = this.userstatuses.filter(function(obj) {
                         return obj.status_id === st;
                     })[0].status_name;
 

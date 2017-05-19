@@ -10,4 +10,5 @@ export class Rtreport {
     day: any;
     lunch: any;
     brake: any;
+    seconds: any;
 }

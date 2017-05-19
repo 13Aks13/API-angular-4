@@ -1,9 +1,19 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Http, Headers, Response, RequestOptions  } from '@angular/http';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import { Observable } from 'rxjs/Rx';
+import * as moment from 'moment/moment';
 // Service
 import { RtreportService } from '../services/rtreport.service';
+import { UserService } from '../services/user.service';
+import { StatisticsService } from '../services/statistics.service';
+import { AuthenticationService } from '../services/authentication.service';
 // Models
 import { Rtreport } from '../models/rtreport';
+import { User } from '../models/user';
+import { UserStatuses } from '../models/userstatuses';
+import { Statistics } from '../models/statistics';
+
 
 @Component({
   selector: 'app-rtreport',
@@ -12,33 +22,110 @@ import { Rtreport } from '../models/rtreport';
 })
 export class RtreportComponent implements OnInit {
 
+    // URLs to web api
+    private domain = this.authenticationService.domain;
+    private statusUrl = 'status';
+
+    users: User[] = [];
+    statuses: UserStatuses[] = [];
     rtreports: Rtreport[] = [];
+    statistics: Statistics;
+
+    row: object = {};
+    a: any = [];
+
+    rows: Observable<any[]>;
 
     private Interval: any;
+    private token: string;
 
-    rows = [
-        { name: 'Austin', gender: 'Male', company: 'Swimlane' },
-        { name: 'Dany', gender: 'Male', company: 'KFC' },
-        { name: 'Molly', gender: 'Female', company: 'Burger King' },
-    ];
     columns = [
+        { prop: 'status' },
         { prop: 'name' },
-        { name: 'Gender' },
-        { name: 'Company' }
+        { prop: 'Check In' },
+        { prop: 'Lunch' },
+        { prop: 'Break' },
     ];
 
     constructor(
-      private rtreportService: RtreportService
-    ) { }
+        private http: Http,
+        private rtreportService: RtreportService,
+        private userService: UserService,
+        private statisticsServices: StatisticsService,
+        private authenticationService: AuthenticationService
+    ) {
+
+    }
+
+    findStatus(id: number): any {
+        return this.users.filter(function (obj) {
+            return obj.id === id;
+        } [0].name);
+    }
 
     ngOnInit() {
+        this.token = this.authenticationService.token;
+        const self = this;
+        this.userService.getUsers().then((user) => {
+            this.users = user;
+            // All statuses
+            this.statisticsServices.getStatuses(this.token).then((status) => {
+                this.statuses = status;
+
+                this.rtreportService.getAllStatuses(this.token).then((res) => {
+                    const result = JSON.parse(res._body);
+                    for (let userId in result) {
+                        let inObj = result[userId];
+
+                        const key = +userId;
+                        // self.http.get(url)
+                        //     .map(res => res.json())
+                        //     .subscribe(
+                        //         data => {
+                        //             console.log(data);
+                        //         },
+                        //         error => {}
+                        //     );
+
+                        self.statisticsServices.getCurrentUserStatus(self.token, key).then((rest) => {
+                            self.row['status'] = self.statuses.filter(function(obj) {
+                                return obj.status_id === rest.status_id;
+                            })[0].status_name;
+
+
+                            const stName = self.users.filter(function(obj) {
+                                    return obj.id === key;
+                                })[0].name;
+                            if (stName !== 'Check Out') {
+                                self.row['name'] = stName;
+                            }
+
+                            for (let prop in inObj) {
+                                const propStatusId = +prop;
+                                const propName = self.statuses.filter(function(obj) {
+                                    return obj.status_id === propStatusId;
+                                })[0].status_name;
+
+                                self.row[propName] = inObj[prop];
+                            }
+                            console.log(self.row);
+                            self.a.push(self.row);
+                            self.row = {};
+                        });
+
+
+                    }
+                    console.log(this.a);
+                    this.rows = Observable.create((subscriber) => {
+                        subscriber.next(this.a);
+                        subscriber.complete();
+                    });
+                });
+
+            });
+        });
 
     }
-
-    ngOnDestroy() {
-        clearInterval(this.Interval);
-    }
-
 
 
 }

@@ -28,13 +28,18 @@ export class RtreportService {
         return Promise.reject(error.message || error);
     }
 
-    getStatusTimeForUser(token: string, user_id: number): Promise<Rtreport[]> {
-        const url = `${this.domain}${this.rtreportUrl}?token=${token}&user_id=${user_id}`;
+    getAllStatuses(token: string): Promise<any> {
+        // Current date
+        const start =  moment().format('YYYY-MM-DD') + ' ' + '00:00:00' ;
+        const end = moment().format('YYYY-MM-DD') + ' ' + '23:59:59';
+
+        const url = `${this.domain}${this.rtreportUrl}?token=${token}&start=${start}&end=${end}`;
 
         // get user statuses from api
         return this.http.get(url)
             .toPromise()
-            .then(response => response.json().data as Rtreport[])
+            .then(response => response)
+            // .then(response => { response.json(); console.log(response); })
             .catch(this.handleError);
     }
 

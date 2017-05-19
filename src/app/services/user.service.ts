@@ -63,19 +63,18 @@ export class UserService {
             .then(response => response.json().data as User)
             .catch(this.handleError);
     }
-/*
+
+    // Get all users
     getUsers(): Promise<User[]> {
         // add authorization header with jwt token
-        let headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token });
-        let options = new RequestOptions({ headers: headers });
-        const url = `${this.domain}${this.userUrl}`;
+        const token = this.authenticationService.token;
+        const url = `${this.domain}${this.usersUrl}?token=${token}`;
 
         // get users from api
-        return this.http.get(url, options)
+        return this.http.get(url)
             .toPromise()
             .then(response => response.json().data as User[])
             .catch(this.handleError);
     }
-*/
 
 }

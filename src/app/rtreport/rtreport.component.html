@@ -1,13 +1,11 @@
 <div>
     <ngx-datatable
-            [rows]="rows"
-            [columns]="columns">
+            class="material striped"
+            [rows]="rows | async"
+            [columns]="columns"
+            [columnMode]="'force'"
+            [headerHeight]="50"
+            [footerHeight]="50"
+            [rowHeight]="50">
     </ngx-datatable>
 </div>
-    <div class="row" *ngFor="let rtreport of rtreports">
-        <div class="col-md-2-md"></div>
-        <div class="col-md-3-md"></div>
-        <div class="col-md-3-md"></div>
-        <div class="col-md-2-md"></div>
-        <div class="col-md-2-md"></div>
-    </div>
