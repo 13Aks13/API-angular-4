@@ -1,8 +1,17 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Http, Headers, Response, RequestOptions  } from '@angular/http';
-import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { Observable } from 'rxjs/Rx';
-import * as moment from 'moment/moment';
+
+
+// Ngx section
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import '@swimlane/ngx-datatable/release/index.css';
+import '@swimlane/ngx-datatable/release/themes/material.css';
+import '@swimlane/ngx-datatable/release/assets/icons.css';
+// http://swimlane.github.io/ngx-datatable/
+
+
 // Service
 import { RtreportService } from '../services/rtreport.service';
 import { UserService } from '../services/user.service';
@@ -49,6 +58,7 @@ export class RtreportComponent implements OnInit {
 
     constructor(
         private http: Http,
+        private router: Router,
         private rtreportService: RtreportService,
         private userService: UserService,
         private statisticsServices: StatisticsService,
@@ -64,6 +74,9 @@ export class RtreportComponent implements OnInit {
     }
 
     ngOnInit() {
+        // Kill Interval
+        clearInterval(this.Interval);
+
         this.token = this.authenticationService.token;
         const self = this;
         this.userService.getUsers().then((user) => {
@@ -124,8 +137,13 @@ export class RtreportComponent implements OnInit {
 
             });
         });
-
+        // Start update user status every X interval
+        this.Interval = setInterval(() => {
+            this.router.navigate(['realtime']);
+        }, 15000);
     }
 
-
+    ngOnDestroy() {
+        clearInterval(this.Interval);
+    }
 }
