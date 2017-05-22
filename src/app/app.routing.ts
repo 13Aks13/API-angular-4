@@ -40,13 +40,13 @@ const routes: Routes = [
             },
         ],
         data: {
-            'roles':  [Roles.USER]
+            'roles': [Roles.USER, Roles.ADMIN]
         },
         canActivate: [AuthGuard],
     },
 
     {
-        path: 'admin',
+        path: '',
         component: HomeComponent,
         children: [
             {
@@ -64,7 +64,7 @@ const routes: Routes = [
             },
         ],
         data: {
-            'roles':  [Roles.ADMIN]
+            'roles': [Roles.ADMIN]
         },
         canActivate: [AuthGuard],
     },

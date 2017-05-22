@@ -62,7 +62,7 @@ export class AuthenticationService {
     getUserRole(): Observable<User> {
         return new Observable(observer => {
             if (this.userRole) {
-                console.log('Role was gotten from service');
+                console.log('Role was gotten from service:' + this.userRole);
                 observer.next(this.userRole);
             } else {
                 const url = `${this.domain}${this.usersUrl}/me?token=${this.token}`;

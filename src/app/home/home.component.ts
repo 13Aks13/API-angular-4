@@ -15,14 +15,14 @@ import { AuthenticationService } from '../services/authentication.service';
     styleUrls: [ './home.component.css' ]
 })
 export class HomeComponent implements OnInit {
-    model: any = {};
+    userRole: string;
 
     constructor(
         private authenticationService: AuthenticationService
     ) { }
 
     ngOnInit() {
-        // this.authenticationService.userRole;
+         this.userRole = this.authenticationService.userRole;
     }
 
 }

@@ -8,12 +8,8 @@ import { Observable } from 'rxjs/Observable';
 import { AuthenticationService } from './authentication.service';
 import { AlertService } from './alert.service';
 
-import { User } from '../models/user';
-
 @Injectable()
 export class AuthGuard implements CanActivate {
-
-    user: User;
 
     constructor(
         private router: Router,
@@ -28,14 +24,20 @@ export class AuthGuard implements CanActivate {
         return new Observable(observer => {
             this.authenticationService.getUserRole().subscribe(
                 role => {
-                    // console.log(role);
+                    // console.log(this.authenticationService.userRole);
                     // logged in so return true
-                    const hasPermission = roles.indexOf(role.title) !== -1;
-                    console.log('User role: ', role.title)
+                    let hasPermission;
+                    if ((this.authenticationService.userRole) && (role.title === undefined)) {
+                        hasPermission = roles.indexOf(this.authenticationService.userRole) !== -1;
+                    } else {
+                        hasPermission = roles.indexOf(role.title) !== -1;
+                    }
+
+                    console.log('User role: ', role.title);
                     console.log('Has permission: ', hasPermission);
                     if (!hasPermission) {
                         this.alertService.error('Sorry, you don`t have permission to that page', false);
-                        this.router.navigate(['']);
+                        this.router.navigate(['/login']);
                     }
                     observer.next(hasPermission);
                 },
@@ -48,7 +50,6 @@ export class AuthGuard implements CanActivate {
                 }
             );
         });
-
 
         // if (localStorage.getItem('currentUser')) {
         //     // logged in so return true
