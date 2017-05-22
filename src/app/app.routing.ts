@@ -40,7 +40,7 @@ const routes: Routes = [
             },
         ],
         data: {
-            'roles': [Roles.USER, Roles.ADMIN]
+            'roles': [Roles.USER, Roles.TEAMLEAD, Roles.ADMIN]
         },
         canActivate: [AuthGuard],
     },

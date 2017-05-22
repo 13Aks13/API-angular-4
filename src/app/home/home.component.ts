@@ -2,7 +2,7 @@
  * Created by Andrew K. on 04.05.17.
  */
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Compiler } from '@angular/core';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/switchMap';
@@ -18,11 +18,15 @@ export class HomeComponent implements OnInit {
     userRole: string;
 
     constructor(
+        private _compiler: Compiler,
         private authenticationService: AuthenticationService
     ) { }
 
     ngOnInit() {
-         this.userRole = this.authenticationService.userRole;
+        // Clear cash https://stackoverflow.com/questions/34808023/how-to-clear-template-cache
+        this._compiler.clearCache();
+        // Get user role
+        this.userRole = this.authenticationService.userRole;
     }
 
 }

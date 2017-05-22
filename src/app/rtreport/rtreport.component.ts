@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, NgZone } from '@angular/core';
+import { Component, OnInit, OnDestroy, Compiler } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Http, Headers, Response, RequestOptions } from '@angular/http';
 import { PlatformLocation } from '@angular/common';
@@ -58,11 +58,8 @@ export class RtreportComponent implements OnInit {
     ];
 
     constructor(
-        private http: Http,
-        private route: ActivatedRoute,
+        private _compiler: Compiler,
         private router: Router,
-        private platformLocation: PlatformLocation,
-        private ngZone: NgZone,
         private rtreportService: RtreportService,
         private userService: UserService,
         private statisticsServices: StatisticsService,
@@ -79,8 +76,23 @@ export class RtreportComponent implements OnInit {
 
     ngOnInit() {
         // Kill Interval
-        // clearInterval(this.Interval);
+        clearInterval(this.Interval);
 
+        // Start update user status every X interval
+        this.Interval = setInterval(() => {
+            console.log('Reload');
+
+            // Clear cach
+            this._compiler.clearCache();
+            // https://stackoverflow.com/questions/39396075/how-to-reload-the-component-of-same-url-in-angular-2
+            this.router.navigateByUrl('realtime', true);
+            this.router.navigate(['realtime']);
+            this.getData();
+            console.log('!');
+        }, 15000);
+    }
+
+    getData(): void {
         this.token = this.authenticationService.token;
         const self = this;
         this.userService.getUsers().then((user) => {
@@ -93,8 +105,9 @@ export class RtreportComponent implements OnInit {
                     const result = JSON.parse(res._body);
                     for (let userId in result) {
                         let inObj = result[userId];
-
+                        // Convert String to Int
                         const key = +userId;
+
                         // self.http.get(url)
                         //     .map(res => res.json())
                         //     .subscribe(
@@ -111,8 +124,8 @@ export class RtreportComponent implements OnInit {
 
 
                             const stName = self.users.filter(function(obj) {
-                                    return obj.id === key;
-                                })[0].name;
+                                return obj.id === key;
+                            })[0].name;
                             if (stName !== 'Check Out') {
                                 self.row['name'] = stName;
                             }
@@ -141,21 +154,6 @@ export class RtreportComponent implements OnInit {
 
             });
         });
-        // Start update user status every X interval
-        this.Interval = setInterval(() => {
-            console.log('Reload');
-            this.router.navigate(['/realtime']);
-
-            // this.platformLocation.onPopState(() => {
-            //     console.log('Reload');
-            //     if (this.platformLocation.pathname.startsWith('/realtime')) {
-            //         this.ngZone.run(() => {
-            //             console.log('Reloading component');
-            //         });
-            //     }
-            // });
-
-        }, 15000);
     }
 
     ngOnDestroy() {
