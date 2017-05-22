@@ -29,6 +29,8 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { RtreportComponent } from './rtreport/rtreport.component';
 import { PolicyComponent } from './policy/policy.component';
 import { SafePipe } from './pipe/safe.pipe';
+import { AdminComponent } from './admin/admin.component';
+import { TeamleadComponent } from './teamlead/teamlead.component';
 
 @NgModule({
   imports: [
@@ -52,6 +54,8 @@ import { SafePipe } from './pipe/safe.pipe';
     PageNotFoundComponent,
     RtreportComponent,
     PolicyComponent,
+    AdminComponent,
+    TeamleadComponent,
   ],
   providers: [
     AuthGuard,

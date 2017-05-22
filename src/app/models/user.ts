@@ -4,6 +4,8 @@ export class User {
     email: string;
     avatar: any;
     goal: any;
+    role: {id: any, title: string};
+    title: string;
     today: any;
     brake: any;
     lunch: any;
@@ -11,3 +13,5 @@ export class User {
     month: any;
     quatter: any;
 }
+
+

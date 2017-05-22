@@ -1,6 +1,7 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, NgZone } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Http, Headers, Response, RequestOptions  } from '@angular/http';
+import { Http, Headers, Response, RequestOptions } from '@angular/http';
+import { PlatformLocation } from '@angular/common';
 import { Observable } from 'rxjs/Rx';
 
 
@@ -58,7 +59,10 @@ export class RtreportComponent implements OnInit {
 
     constructor(
         private http: Http,
+        private route: ActivatedRoute,
         private router: Router,
+        private platformLocation: PlatformLocation,
+        private ngZone: NgZone,
         private rtreportService: RtreportService,
         private userService: UserService,
         private statisticsServices: StatisticsService,
@@ -75,7 +79,7 @@ export class RtreportComponent implements OnInit {
 
     ngOnInit() {
         // Kill Interval
-        clearInterval(this.Interval);
+        // clearInterval(this.Interval);
 
         this.token = this.authenticationService.token;
         const self = this;
@@ -139,7 +143,18 @@ export class RtreportComponent implements OnInit {
         });
         // Start update user status every X interval
         this.Interval = setInterval(() => {
-            this.router.navigate(['realtime']);
+            console.log('Reload');
+            this.router.navigate(['/realtime']);
+
+            // this.platformLocation.onPopState(() => {
+            //     console.log('Reload');
+            //     if (this.platformLocation.pathname.startsWith('/realtime')) {
+            //         this.ngZone.run(() => {
+            //             console.log('Reloading component');
+            //         });
+            //     }
+            // });
+
         }, 15000);
     }
 

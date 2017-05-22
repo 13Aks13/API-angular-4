@@ -13,9 +13,14 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { PolicyComponent } from './policy/policy.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
+import { AdminComponent } from './admin/admin.component';
+import { TeamleadComponent } from './teamlead/teamlead.component';
 import { RtreportComponent } from './rtreport/rtreport.component';
 
+import { Roles } from './models/roles';
+
 const routes: Routes = [
+
     {
         path: '',
         component: HomeComponent,
@@ -33,13 +38,38 @@ const routes: Routes = [
                 path: 'policy',
                 component: PolicyComponent
             },
+        ],
+        data: {
+            'roles':  [Roles.USER]
+        },
+        canActivate: [AuthGuard],
+    },
+
+    {
+        path: 'admin',
+        component: HomeComponent,
+        children: [
+            {
+                path: 'admin',
+                redirectTo: '/admin',
+                pathMatch: 'full'
+            },
+            {
+                path: 'admin',
+                component: AdminComponent
+            },
             {
                 path: 'realtime',
                 component: RtreportComponent
-            }
+            },
         ],
+        data: {
+            'roles':  [Roles.ADMIN]
+        },
         canActivate: [AuthGuard],
     },
+
+
     { path: 'login', component: LoginComponent },
     { path: 'register', component: RegisterComponent },
 

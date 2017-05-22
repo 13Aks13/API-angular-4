@@ -9,16 +9,21 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
 
+// Models
+import { User } from '../models/user';
+
 
 @Injectable()
 export class AuthenticationService {
 
     public token: string;
+    public userRole: string;
 
     // URL to web api
-    // public domain = 'http://ws.dev/';
-    public domain = 'http://wsapi.test-y-sbm.com/';
+    public domain = 'http://ws.dev/';
+    // public domain = 'http://wsapi.test-y-sbm.com/';
     private loginUrl = 'login';
+    private usersUrl = 'users';
 
     constructor(private http: Http) {
         // set token if saved in local storage
@@ -41,13 +46,41 @@ export class AuthenticationService {
                     this.token = user.token;
                     localStorage.setItem('currentUser', JSON.stringify(user));
                 }
-            });
+        });
     }
 
     logout(): void {
         // clear token remove user from local storage to log user out
         this.token = null;
         localStorage.removeItem('currentUser');
+    }
+
+    setUserRole(role) {
+        this.userRole = role;
+    }
+
+    getUserRole(): Observable<User> {
+        return new Observable(observer => {
+            if (this.userRole) {
+                console.log('Role was gotten from service');
+                observer.next(this.userRole);
+            } else {
+                const url = `${this.domain}${this.usersUrl}/me?token=${this.token}`;
+
+                this.http.get(url)
+                    .map(res => res.json().data as User)
+                    .subscribe(
+                        User => {
+                            console.log('Role was gotten from server:' + User.role.title);
+                            this.setUserRole(User.role.title);
+                            observer.next(User.role);
+                        },
+                        error => {
+                            console.log('Can`t get user role', error);
+                        }
+                    );
+            }
+        });
     }
 
 }

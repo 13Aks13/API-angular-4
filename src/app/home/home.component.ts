@@ -8,14 +8,21 @@ import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/switchMap';
 import * as moment from 'moment/moment';
 
+import { AuthenticationService } from '../services/authentication.service';
+
 @Component({
     templateUrl: './home.component.html',
     styleUrls: [ './home.component.css' ]
 })
 export class HomeComponent implements OnInit {
+    model: any = {};
 
-    constructor( ) { }
+    constructor(
+        private authenticationService: AuthenticationService
+    ) { }
 
-    ngOnInit() { }
+    ngOnInit() {
+        // this.authenticationService.userRole;
+    }
 
 }
