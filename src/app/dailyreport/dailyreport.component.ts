@@ -52,7 +52,7 @@ export class DailyReportComponent implements OnInit {
          // Save report to DB
          this.dailyReport.storeDailyReport(this.user.id, 0, this.model.report).then((dailyreport) => {
             this.dailyreport = dailyreport;
-            console.log(this.dailyreport);
+            // console.log(this.dailyreport);
          });
      });
      this.visible = false;

@@ -23,6 +23,7 @@ import { Rtreport } from '../models/rtreport';
 import { User } from '../models/user';
 import { UserStatuses } from '../models/userstatuses';
 import { Statistics } from '../models/statistics';
+import {ifTrue} from "codelyzer/util/function";
 
 
 @Component({
@@ -77,18 +78,16 @@ export class RtreportComponent implements OnInit {
     ngOnInit() {
         // Kill Interval
         clearInterval(this.Interval);
-
         // Start update user status every X interval
         this.Interval = setInterval(() => {
-            console.log('Reload');
-
-            // Clear cach
+            // Clear cache
             this._compiler.clearCache();
             // https://stackoverflow.com/questions/39396075/how-to-reload-the-component-of-same-url-in-angular-2
-            this.router.navigateByUrl('realtime', true);
-            this.router.navigate(['realtime']);
+            this.a = [];
+            this.router.navigateByUrl('/realtime', true);
+            this.router.navigate(['/realtime']);
+            // window.location.reload();
             this.getData();
-            console.log('!');
         }, 15000);
     }
 
@@ -100,7 +99,6 @@ export class RtreportComponent implements OnInit {
             // All statuses
             this.statisticsServices.getStatuses(this.token).then((status) => {
                 this.statuses = status;
-
                 this.rtreportService.getAllStatuses(this.token).then((res) => {
                     const result = JSON.parse(res._body);
                     for (let userId in result) {
@@ -138,11 +136,9 @@ export class RtreportComponent implements OnInit {
 
                                 self.row[propName] = inObj[prop];
                             }
-                            console.log(self.row);
                             self.a.push(self.row);
                             self.row = {};
                         });
-
 
                     }
                     console.log(this.a);

@@ -23,7 +23,7 @@ export class HomeComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        // Clear cash https://stackoverflow.com/questions/34808023/how-to-clear-template-cache
+        // Clear cashe https://stackoverflow.com/questions/34808023/how-to-clear-template-cache
         this._compiler.clearCache();
         // Get user role
         this.userRole = this.authenticationService.userRole;
