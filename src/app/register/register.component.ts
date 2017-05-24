@@ -40,8 +40,6 @@ export class RegisterComponent {
         let vUser = true;
         let vEmail = true;
 
-        console.log('User: ', user);
-
         // Required fields
         if (!this.validateService.validateRegister(user)) {
             this.flashMessagesService.show('Please fill in all fields', {cssClass: 'alert-danger', timeout: 3000});
@@ -55,7 +53,8 @@ export class RegisterComponent {
         }
 
         if (vUser  && vEmail) {
-            this.userService.create(this.model)
+            // Need User model for create
+            this.userService.create(user)
                 .then(
                     data => {
                         this.flashMessagesService.show('Registration successful', {cssClass: 'alert-success', timeout: 5000});

@@ -32,9 +32,13 @@ export class UserService {
         return Promise.reject(error.message || error);
     }
 
-    create(user: User): Promise<User> {
+    create(user: any): Promise<User> {
+        const headers = new Headers({ 'Content-Type': 'x-www-form-urlencoded' });
+        const options = new RequestOptions({ headers: headers });
+
         const url = `${this.domain}${this.registerUrl}`;
-        return this.http.post(url, user)
+        console.log('post:', user);
+        return this.http.post(url, { name: user.username, email: user.email, password: user.password })
             .toPromise()
             .then(response => response.json().data as User)
             .catch(this.handleError);

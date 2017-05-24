@@ -24,6 +24,7 @@ import { User } from '../models/user';
 import { UserStatuses } from '../models/userstatuses';
 import { Statistics } from '../models/statistics';
 import {ifTrue} from "codelyzer/util/function";
+import {forEach} from "@angular/router/src/utils/collection";
 
 
 @Component({
@@ -39,11 +40,9 @@ export class RtreportComponent implements OnInit {
 
     users: User[] = [];
     statuses: UserStatuses[] = [];
-    rtreports: Rtreport[] = [];
-    statistics: Statistics;
 
     row: object = {};
-    a: any = [];
+    a: Array<object> = [];
 
     rows: Observable<any[]>;
 
@@ -76,6 +75,8 @@ export class RtreportComponent implements OnInit {
     }
 
     ngOnInit() {
+        // Load data from API
+        this.getData();
         // Kill Interval
         clearInterval(this.Interval);
         // Start update user status every X interval
@@ -87,8 +88,9 @@ export class RtreportComponent implements OnInit {
             this.router.navigateByUrl('/realtime', true);
             this.router.navigate(['/realtime']);
             // window.location.reload();
+            // Update data in table
             this.getData();
-        }, 15000);
+        }, 5000);
     }
 
     getData(): void {
@@ -101,7 +103,10 @@ export class RtreportComponent implements OnInit {
                 this.statuses = status;
                 this.rtreportService.getAllStatuses(this.token).then((res) => {
                     const result = JSON.parse(res._body);
+                    console.log(result);
+                    let promises = [];
                     for (let userId in result) {
+                        // Objec data
                         let inObj = result[userId];
                         // Convert String to Int
                         const key = +userId;
@@ -115,37 +120,48 @@ export class RtreportComponent implements OnInit {
                         //         error => {}
                         //     );
 
-                        self.statisticsServices.getCurrentUserStatus(self.token, key).then((rest) => {
-                            self.row['status'] = self.statuses.filter(function(obj) {
-                                return obj.status_id === rest.status_id;
-                            })[0].status_name;
-
-
-                            const stName = self.users.filter(function(obj) {
-                                return obj.id === key;
-                            })[0].name;
-                            if (stName !== 'Check Out') {
-                                self.row['name'] = stName;
-                            }
-
-                            for (let prop in inObj) {
-                                const propStatusId = +prop;
-                                const propName = self.statuses.filter(function(obj) {
-                                    return obj.status_id === propStatusId;
+                        // This need for Async get data
+                        let promise = new Promise((resolve, reject) => {
+                            self.statisticsServices.getCurrentUserStatus(self.token, key).then((rest) => {
+                                self.row['status'] = self.statuses.filter(function(obj) {
+                                    return obj.status_id === rest.status_id;
                                 })[0].status_name;
 
-                                self.row[propName] = inObj[prop];
-                            }
-                            self.a.push(self.row);
-                            self.row = {};
-                        });
 
+                                const stName = self.users.filter(function(obj) {
+                                    return obj.id === key;
+                                })[0].name;
+                                if (stName !== 'Check Out') {
+                                    self.row['name'] = stName;
+                                }
+
+                                for (let prop in inObj) {
+                                    const propStatusId = +prop;
+                                    const propName = self.statuses.filter(function(obj) {
+                                        return obj.status_id === propStatusId;
+                                    })[0].status_name;
+
+                                    self.row[propName] = inObj[prop];
+                                }
+
+                                // self.a.push(self.row);
+                                // console.log(self.a.length);
+                                // self.row = {};
+                                const row = self.row;
+                                resolve(row);
+                                self.row = {};
+                            });
+                        });
+                        promises.push(promise);
                     }
-                    console.log(this.a);
-                    this.rows = Observable.create((subscriber) => {
-                        subscriber.next(this.a);
-                        subscriber.complete();
+                    Promise.all(promises).then(results => {
+                        console.log(results);
+                        this.rows = Observable.create((subscriber) => {
+                            subscriber.next(results);
+                            subscriber.complete();
+                        });
                     });
+
                 });
 
             });

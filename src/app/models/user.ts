@@ -2,6 +2,7 @@ export class User {
     id: any;
     name: string;
     email: string;
+    password: string;
     avatar: any;
     goal: any;
     role: {id: any, title: string};

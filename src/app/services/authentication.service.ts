@@ -22,8 +22,8 @@ export class AuthenticationService {
     public userRole: string;
 
     // URL to web api
-    public domain = 'http://ws.dev/';
-    // public domain = 'http://wsapi.test-y-sbm.com/';
+    // public domain = 'http://ws.dev/';
+    public domain = 'http://wsapi.test-y-sbm.com/';
     private loginUrl = 'login';
     private usersUrl = 'users';
 
@@ -46,7 +46,6 @@ export class AuthenticationService {
 
         return this.http.post(url, { email: email, password: password }, options)
             .map((response: Response) => {
-                console.log('response:', response);
                 // login successful if there's a jwt token in the response
                 const user = response.json();
                 if (user && user.token) {
