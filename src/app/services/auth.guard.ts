@@ -5,6 +5,7 @@
 import { Injectable } from '@angular/core';
 import { Router, CanActivate } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
+import { FlashMessagesService } from 'angular2-flash-messages';
 import { AuthenticationService } from './authentication.service';
 import { AlertService } from './alert.service';
 
@@ -14,7 +15,7 @@ export class AuthGuard implements CanActivate {
     constructor(
         private router: Router,
         private authenticationService: AuthenticationService,
-        private alertService: AlertService,
+        private flashMessagesService: FlashMessagesService
     ) { }
 
     canActivate(routes, state): Observable<boolean> | Promise<boolean> | boolean {
@@ -24,40 +25,39 @@ export class AuthGuard implements CanActivate {
         return new Observable(observer => {
             this.authenticationService.getUserRole().subscribe(
                 role => {
-                    // console.log(this.authenticationService.userRole);
-                    // logged in so return true
-                    let hasPermission;
-                    if ((this.authenticationService.userRole) && (role.title === undefined)) {
-                        hasPermission = roles.indexOf(this.authenticationService.userRole) !== -1;
-                    } else {
-                        hasPermission = roles.indexOf(role.title) !== -1;
-                    }
+                    // if role = define
+                    console.log('This roles: ', role);
+                    if (role) {
+                        // logged in so return true
+                        let hasPermission;
+                        if ((this.authenticationService.userRole) && (role.title === undefined)) {
+                            hasPermission = roles.indexOf(this.authenticationService.userRole) !== -1;
+                        } else {
+                            hasPermission = roles.indexOf(role.title) !== -1;
+                        }
 
-                    console.log('User role: ', role.title);
-                    console.log('Has permission: ', hasPermission);
-                    if (!hasPermission) {
-                        this.alertService.error('Sorry, you don`t have permission to that page', false);
+                        console.log('User role: ', role.title);
+                        console.log('Has permission: ', hasPermission);
+                        if (!hasPermission) {
+                            this.flashMessagesService.show('Sorry, you don`t have permission to that page', { cssClass: 'alert-success', timeout: 3000 });
+                            this.router.navigate(['/login']);
+                        }
+                        observer.next(hasPermission);
+                    } else {
+                        observer.next(false);
+                        // not logged in so redirect to login page
                         this.router.navigate(['/login']);
+                        this.flashMessagesService.show('Sorry, you don`t have permission to that page. Please log in.', { cssClass: 'alert-danger', timeout: 3000 });
                     }
-                    observer.next(hasPermission);
                 },
                 error => {
                     console.log(error);
                     observer.next(false);
                     // not logged in so redirect to login page
                     this.router.navigate(['/login']);
-                    this.alertService.error('Please log in', false);
+                    this.flashMessagesService.show('Please log in', { cssClass: 'alert-danger', timeout: 3000 });
                 }
             );
         });
-
-        // if (localStorage.getItem('currentUser')) {
-        //     // logged in so return true
-        //     return true;
-        // }
-        //
-        // // not logged in so redirect to login page
-        // this.router.navigate(['/login']);
-        // return false;
     }
 }

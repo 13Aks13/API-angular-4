@@ -5,9 +5,11 @@
 
 import { Injectable } from '@angular/core';
 import { Http, Headers, Response, RequestOptions  } from '@angular/http';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
+
 
 // Models
 import { User } from '../models/user';
@@ -25,7 +27,10 @@ export class AuthenticationService {
     private loginUrl = 'login';
     private usersUrl = 'users';
 
-    constructor(private http: Http) {
+    constructor(
+        private http: Http,
+        private router: Router
+    ) {
         // set token if saved in local storage
         const currentUser = JSON.parse(localStorage.getItem('currentUser'));
         this.token = currentUser && currentUser.token;
@@ -37,8 +42,11 @@ export class AuthenticationService {
 
         const url = `${this.domain}${this.loginUrl}`;
 
-        return this.http.post(url, JSON.stringify({ email: email, password: password }), options)
+        // console.log('JSON.stringify:', JSON.stringify({ email: email, password: password }));
+
+        return this.http.post(url, { email: email, password: password }, options)
             .map((response: Response) => {
+                console.log('response:', response);
                 // login successful if there's a jwt token in the response
                 const user = response.json();
                 if (user && user.token) {
@@ -63,7 +71,7 @@ export class AuthenticationService {
     getUserRole(): Observable<User> {
         return new Observable(observer => {
             if (this.userRole) {
-                console.log('Role was gotten from service:' + this.userRole);
+                console.log('Role was gotten from service: ',  this.userRole);
                 observer.next(this.userRole);
             } else {
                 const url = `${this.domain}${this.usersUrl}/me?token=${this.token}`;
@@ -72,12 +80,13 @@ export class AuthenticationService {
                     .map(res => res.json().data as User)
                     .subscribe(
                         User => {
-                            console.log('Role was gotten from server:' + User.role.title);
+                            console.log('Role was gotten from server: ', User.role.title);
                             this.setUserRole(User.role.title);
                             observer.next(User.role);
                         },
                         error => {
                             console.log('Can`t get user role', error);
+                            observer.next(false);
                         }
                     );
             }

@@ -2,18 +2,13 @@
     <form name="form" (ngSubmit)="f.form.valid && login()" #f="ngForm" novalidate>
         <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !email.valid }">
             <label for="email">Email address</label>
-            <input type="text" class="form-control" id="email" placeholder="Email" [(ngModel)]="model.email" #email="ngModel" [ngModelOptions]="{standalone: true}" required>
+            <input type="text" [(ngModel)]="model.email" name="email" #email="ngModel" class="form-control" id="email" placeholder="Email"  required>
             <div *ngIf="f.submitted && !email.valid" class="help-block">Email is required</div>
         </div>
         <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !password.valid }">
             <label for="password">Password</label>
-            <input type="password" class="form-control" id="password" placeholder="Password" [(ngModel)]="model.password" #password="ngModel" [ngModelOptions]="{standalone: true}" required />
+            <input type="password" [(ngModel)]="model.password" name="password" #password="ngModel" class="form-control" id="password" placeholder="Password" required>
             <div *ngIf="f.submitted && !password.valid" class="help-block">Password is required</div>
-        </div>
-        <div class="checkbox">
-            <label>
-                <input type="checkbox"> Check me out
-            </label>
         </div>
         <div class="form-group">
             <button [disabled]="loading" class="btn btn-primary">Login</button>

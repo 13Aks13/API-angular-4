@@ -5,10 +5,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Http, Headers, RequestOptions } from '@angular/http';
-
-
 import { AuthenticationService } from '../services/authentication.service';
-import { AlertService } from '../services/alert.service';
+import { FlashMessagesService } from 'angular2-flash-messages';
 
 @Component({
     templateUrl: './login.component.html',
@@ -25,7 +23,8 @@ export class LoginComponent implements OnInit {
         private route: ActivatedRoute,
         private router: Router,
         private authenticationService: AuthenticationService,
-        private alertService: AlertService) { }
+        private flashMessagesService: FlashMessagesService
+    ) { }
 
     ngOnInit() {
         // reset login status
@@ -40,7 +39,7 @@ export class LoginComponent implements OnInit {
                     this.router.navigate(['/']);
                 },
                 error => {
-                    this.alertService.error(error);
+                    this.flashMessagesService.show(error, { cssClass: 'alert-danger', timeout: 3000 });
                     this.loading = false;
                 });
     }

@@ -9,7 +9,6 @@ import { Statistics } from '../models/statistics';
 import { UserStatuses } from '../models/userstatuses';
 import { Time } from '../models/time';
 
-import { AlertService } from '../services/alert.service';
 import { AuthenticationService } from '../services/authentication.service';
 import { UserService } from '../services/user.service';
 import { StatisticsService } from '../services/statistics.service';
@@ -37,7 +36,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private model: EventItem[];
 
     constructor(
-        private alertService: AlertService,
         private authenticationService: AuthenticationService,
         private userService: UserService,
         private statisticsService: StatisticsService,

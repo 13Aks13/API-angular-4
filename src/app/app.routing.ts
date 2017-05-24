@@ -21,6 +21,9 @@ import { Roles } from './models/roles';
 
 const routes: Routes = [
 
+    { path: 'login', component: LoginComponent },
+    { path: 'register', component: RegisterComponent },
+
     {
         path: '',
         component: HomeComponent,
@@ -50,6 +53,26 @@ const routes: Routes = [
         component: HomeComponent,
         children: [
             {
+                path: 'teamlead',
+                redirectTo: '/teamlead',
+                pathMatch: 'full'
+            },
+            {
+                path: 'teamlead',
+                component: TeamleadComponent
+            }
+        ],
+        data: {
+            'roles': [Roles.TEAMLEAD, Roles.ADMIN]
+        },
+        canActivate: [AuthGuard],
+    },
+
+    {
+        path: '',
+        component: HomeComponent,
+        children: [
+            {
                 path: 'admin',
                 redirectTo: '/admin',
                 pathMatch: 'full'
@@ -69,9 +92,6 @@ const routes: Routes = [
         canActivate: [AuthGuard],
     },
 
-
-    { path: 'login', component: LoginComponent },
-    { path: 'register', component: RegisterComponent },
 
     // otherwise redirect to home
     // { path: '**', redirectTo: '' },

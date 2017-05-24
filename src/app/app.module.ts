@@ -5,6 +5,7 @@ import { HttpModule } from '@angular/http';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app.routing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FlashMessagesModule } from 'angular2-flash-messages';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
 // Services
@@ -15,6 +16,7 @@ import { StatisticsService } from './services/statistics.service';
 import { DailyreportService } from './services/dailyreport.service';
 import { RtreportService } from './services/rtreport.service';
 import { EventItem, EventService } from './services/event.service';
+import { ValidateService } from './services/validate.service';
 
 // Components
 import { AlertComponent } from './alert/alert.component';
@@ -40,6 +42,7 @@ import { TeamleadComponent } from './teamlead/teamlead.component';
     AppRoutingModule,
     BrowserAnimationsModule,
     NgxDatatableModule,
+    FlashMessagesModule,
   ],
   declarations: [
     SafePipe,
@@ -66,6 +69,7 @@ import { TeamleadComponent } from './teamlead/teamlead.component';
     DailyreportService,
     RtreportService,
     EventService,
+    ValidateService,
   ],
   bootstrap: [ AppComponent ]
 })
