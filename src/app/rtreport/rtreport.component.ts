@@ -90,7 +90,7 @@ export class RtreportComponent implements OnInit {
             // window.location.reload();
             // Update data in table
             this.getData();
-        }, 5000);
+        }, 15000);
     }
 
     getData(): void {
@@ -158,7 +158,7 @@ export class RtreportComponent implements OnInit {
                         console.log(results);
                         this.rows = Observable.create((subscriber) => {
                             subscriber.next(results);
-                            subscriber.complete();
+                            //subscriber.complete();
                         });
                     });
 
