@@ -15,7 +15,8 @@ import { ValidateService } from '../services/validate.service';
 
 export class RegisterComponent {
 
-    username: String;
+    first_name: String;
+    last_name: String;
     email: String;
     password: String;
 
@@ -32,7 +33,8 @@ export class RegisterComponent {
     register() {
         this.loading = true;
         const user = {
-            username: this.username,
+            first_name: this.first_name,
+            last_name: this.last_name,
             email: this.email,
             password: this.password
         }

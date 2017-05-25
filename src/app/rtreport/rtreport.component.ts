@@ -74,6 +74,16 @@ export class RtreportComponent implements OnInit {
         } [0].name);
     }
 
+
+    // self.http.get(url)
+    //     .map(res => res.json())
+    //     .subscribe(
+    //         data => {
+    //             console.log(data);
+    //         },
+    //         error => {}
+    //     );
+
     ngOnInit() {
         // Load data from API
         this.getData();
@@ -103,7 +113,6 @@ export class RtreportComponent implements OnInit {
                 this.statuses = status;
                 this.rtreportService.getAllStatuses(this.token).then((res) => {
                     const result = JSON.parse(res._body);
-                    console.log(result);
                     let promises = [];
                     for (let userId in result) {
                         // Objec data
@@ -111,29 +120,28 @@ export class RtreportComponent implements OnInit {
                         // Convert String to Int
                         const key = +userId;
 
-                        // self.http.get(url)
-                        //     .map(res => res.json())
-                        //     .subscribe(
-                        //         data => {
-                        //             console.log(data);
-                        //         },
-                        //         error => {}
-                        //     );
-
                         // This need for Async get data
                         let promise = new Promise((resolve, reject) => {
+                            // User current status
                             self.statisticsServices.getCurrentUserStatus(self.token, key).then((rest) => {
                                 self.row['status'] = self.statuses.filter(function(obj) {
                                     return obj.status_id === rest.status_id;
                                 })[0].status_name;
 
-
-                                const stName = self.users.filter(function(obj) {
+                                // const stName =  self.row['status'];
+                                let Name = self.users.filter(function(obj) {
                                     return obj.id === key;
-                                })[0].name;
-                                if (stName !== 'Check Out') {
-                                    self.row['name'] = stName;
-                                }
+                                })[0].first_name;
+
+                                Name = Name + ' ' + self.users.filter(function(obj) {
+                                    return obj.id === key;
+                                })[0].last_name;
+
+                                self.row['name'] = Name;
+
+                                // if (stName !== 'Check Out') {
+                                //
+                                // }
 
                                 for (let prop in inObj) {
                                     const propStatusId = +prop;
@@ -155,7 +163,7 @@ export class RtreportComponent implements OnInit {
                         promises.push(promise);
                     }
                     Promise.all(promises).then(results => {
-                        console.log(results);
+                        // console.log(results);
                         this.rows = Observable.create((subscriber) => {
                             subscriber.next(results);
                             //subscriber.complete();

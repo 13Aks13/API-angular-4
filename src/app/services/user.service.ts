@@ -37,8 +37,7 @@ export class UserService {
         const options = new RequestOptions({ headers: headers });
 
         const url = `${this.domain}${this.registerUrl}`;
-        console.log('post:', user);
-        return this.http.post(url, { name: user.username, email: user.email, password: user.password })
+        return this.http.post(url, { first_name: user.first_name, last_name: user.last_name, email: user.email, password: user.password })
             .toPromise()
             .then(response => response.json().data as User)
             .catch(this.handleError);
