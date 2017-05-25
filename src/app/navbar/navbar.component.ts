@@ -18,52 +18,87 @@ import { EventItem, EventService } from '../services/event.service';
 })
 export class NavbarComponent implements OnInit, OnDestroy {
 
-  user: User;
-  statistics: Statistics;
-  userstatuses: UserStatuses;
+    user: User;
+    statistics: Statistics;
+    userstatuses: UserStatuses;
 
-  // User Token
-  private token = JSON.parse(localStorage.getItem('currentUser')).token;
-  private addedItem: EventItem;
+    private Interval: any;
 
-  constructor(
+    // User Token
+    private token = JSON.parse(localStorage.getItem('currentUser')).token;
+    private addedItem: EventItem;
+
+    constructor(
       private userService: UserService,
       private statisticsService: StatisticsService,
       private eventService: EventService
-  ) { eventService.itemAdded$.subscribe(item => this.onItemAdded(item)); }
+    ) {
+        eventService.itemAdded$.subscribe(item => this.onItemAdded(item));
+    }
 
-  private onItemAdded(item: EventItem): void {
-      // do something with added item
-      this.addedItem = item;
-      console.log(item);
-      this.statistics.status_id = this.addedItem.id;
-      this.statistics.status_name = this.addedItem.name;
-  }
+    private onItemAdded(item: EventItem): void {
+        // do something with added item
+        this.addedItem = item;
+        this.statistics.status_id = this.addedItem.id;
+        this.statistics.status_name = this.addedItem.name;
+        // Start global status
+        this.globalStatus(this.statistics.status_id, this.statistics.status_name);
+    }
 
-  // Get current user status
-  getCurrentUserStatus(token: string, id: number): any {
+    // Get current user status
+    getCurrentUserStatus(token: string, id: number): any {
     return this.statisticsService.getCurrentUserStatus(token, id)
         .then(statistics => this.statistics = statistics);
-  }
+    }
 
-  ngOnInit() {
-    // Get user by token
-    this.userService.getUserByToken(this.token).then( (user) => {
-        this.user = user;
-        // Get current user status
-        this.statisticsService.getCurrentUserStatus(this.token, this.user.id).then((statistics) => {
-            this.statistics = statistics;
-            // Get status name
-            this.statisticsService.getStatusName(this.token, this.statistics.status_id).then((userstatuses) => {
-                this.userstatuses = userstatuses;
-                this.statistics.status_name = this.userstatuses.status_name;
+    // Set current status for user
+    setCurrentUserStatus(user_id: number, status_id: number): any {
+        return this.statisticsService.setCurrentUserStatus(user_id, status_id)
+            .then(statistics => this.statistics = statistics);
+    }
+
+    // Update current user time in Interval
+    updCurrentUserStatus(user_id: number, status_id: number): any {
+        return this.statisticsService.updCurrentUserStatus(user_id, status_id)
+            .then(statistics => this.statistics = statistics);
+    }
+
+    ngOnInit() {
+        // Get user by token
+        this.userService.getUserByToken(this.token).then( (user) => {
+            this.user = user;
+            // Get current user status
+            this.statisticsService.getCurrentUserStatus(this.token, this.user.id).then((statistics) => {
+                this.statistics = statistics;
+                // Get status name
+                this.statisticsService.getStatusName(this.token, this.statistics.status_id).then((userstatuses) => {
+                    this.userstatuses = userstatuses;
+                    this.statistics.status_name = this.userstatuses.status_name;
+                });
             });
         });
-    });
-  }
+    }
 
-  ngOnDestroy() {
+    // G(S)et user status
+    globalStatus(id, name) {
+        if ((id !== 1) && (id !== undefined)) {
+            // Kill Interval
+            clearInterval(this.Interval);
+            // Start update user status every X interval
+            this.Interval = setInterval(() => {
+                this.statisticsService.updCurrentUserStatus(this.user.id, this.statistics.status_id).then((response) => {
+                    console.log('Global status upd: ', response.seconds);
+                });
+            }, 10000);
 
-  }
+        }
+    }
+
+
+    ngOnDestroy() {
+      clearInterval(this.Interval);
+      // Send status offline to API
+      this.setCurrentUserStatus(this.user.id, 1);
+    }
 
 }

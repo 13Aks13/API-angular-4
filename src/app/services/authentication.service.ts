@@ -22,8 +22,8 @@ export class AuthenticationService {
     public userRole: string;
 
     // URL to web api
-    // public domain = 'http://ws.dev/';
-    public domain = 'http://wsapi.test-y-sbm.com/';
+    public domain = 'http://ws.dev/';
+    // public domain = 'http://wsapi.test-y-sbm.com/';
     private loginUrl = 'login';
     private usersUrl = 'users';
 

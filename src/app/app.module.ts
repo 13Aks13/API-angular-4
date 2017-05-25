@@ -1,12 +1,13 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app.routing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FlashMessagesModule } from 'angular2-flash-messages';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import { AlertModule } from 'ngx-bootstrap';
 
 // Services
 import { AuthGuard } from './services/auth.guard';
@@ -17,6 +18,7 @@ import { DailyreportService } from './services/dailyreport.service';
 import { RtreportService } from './services/rtreport.service';
 import { EventItem, EventService } from './services/event.service';
 import { ValidateService } from './services/validate.service';
+import { LocationService } from './services/location.service';
 
 // Components
 import { AlertComponent } from './alert/alert.component';
@@ -33,6 +35,7 @@ import { PolicyComponent } from './policy/policy.component';
 import { SafePipe } from './pipe/safe.pipe';
 import { AdminComponent } from './admin/admin.component';
 import { TeamleadComponent } from './teamlead/teamlead.component';
+import { ProfileComponent } from './profile/profile.component';
 
 @NgModule({
   imports: [
@@ -42,7 +45,9 @@ import { TeamleadComponent } from './teamlead/teamlead.component';
     AppRoutingModule,
     BrowserAnimationsModule,
     NgxDatatableModule,
+    AlertModule,
     FlashMessagesModule,
+    ReactiveFormsModule
   ],
   declarations: [
     SafePipe,
@@ -59,6 +64,7 @@ import { TeamleadComponent } from './teamlead/teamlead.component';
     PolicyComponent,
     AdminComponent,
     TeamleadComponent,
+    ProfileComponent,
   ],
   providers: [
     AuthGuard,
@@ -70,6 +76,7 @@ import { TeamleadComponent } from './teamlead/teamlead.component';
     RtreportService,
     EventService,
     ValidateService,
+    LocationService,
   ],
   bootstrap: [ AppComponent ]
 })

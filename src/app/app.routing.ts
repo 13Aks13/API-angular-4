@@ -16,6 +16,8 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { AdminComponent } from './admin/admin.component';
 import { TeamleadComponent } from './teamlead/teamlead.component';
 import { RtreportComponent } from './rtreport/rtreport.component';
+import { ProfileComponent } from './profile/profile.component';
+
 
 import { Roles } from './models/roles';
 
@@ -36,6 +38,10 @@ const routes: Routes = [
             {
                 path: 'dashboard',
                 component: DashboardComponent
+            },
+            {
+                path: 'profile',
+                component: ProfileComponent
             },
             {
                 path: 'policy',

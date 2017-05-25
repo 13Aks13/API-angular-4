@@ -1,5 +1,5 @@
 <div class="col-sm-6 col-sm-offset-2">
-    <form name="form" (submit)="login()" novalidate>
+    <form name="form" (ngSubmit)="login()" novalidate>
         <div class="form-group">
             <label for="email">Email address</label>
             <input type="text" [(ngModel)]="email" name="email" class="form-control" placeholder="Email"  required>
