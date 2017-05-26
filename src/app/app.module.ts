@@ -1,7 +1,8 @@
-import { NgModule } from '@angular/core';
+import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
+import { Http, HttpModule } from '@angular/http';
+
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app.routing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -21,6 +22,7 @@ import { ValidateService } from './services/validate.service';
 import { LocationService } from './services/location.service';
 
 // Components
+import { AppConfig } from './config/app.config';
 import { AlertComponent } from './alert/alert.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
@@ -37,48 +39,61 @@ import { AdminComponent } from './admin/admin.component';
 import { TeamleadComponent } from './teamlead/teamlead.component';
 import { ProfileComponent } from './profile/profile.component';
 
+
 @NgModule({
-  imports: [
-    BrowserModule,
-    FormsModule,
-    HttpModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    NgxDatatableModule,
-    AlertModule,
-    FlashMessagesModule,
-    ReactiveFormsModule
-  ],
-  declarations: [
-    SafePipe,
-    AppComponent,
-    AlertComponent,
-    LoginComponent,
-    RegisterComponent,
-    HomeComponent,
-    NavbarComponent,
-    DashboardComponent,
-    DailyReportComponent,
-    PageNotFoundComponent,
-    RtreportComponent,
-    PolicyComponent,
-    AdminComponent,
-    TeamleadComponent,
-    ProfileComponent,
-  ],
-  providers: [
-    AuthGuard,
-    AlertService,
-    AuthenticationService,
-    UserService,
-    StatisticsService,
-    DailyreportService,
-    RtreportService,
-    EventService,
-    ValidateService,
-    LocationService,
-  ],
-  bootstrap: [ AppComponent ]
+    imports: [
+        BrowserModule,
+        FormsModule,
+        HttpModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        NgxDatatableModule,
+        AlertModule,
+        FlashMessagesModule,
+        ReactiveFormsModule
+    ],
+    declarations: [
+        SafePipe,
+        AppComponent,
+        AlertComponent,
+        LoginComponent,
+        RegisterComponent,
+        HomeComponent,
+        NavbarComponent,
+        DashboardComponent,
+        DailyReportComponent,
+        PageNotFoundComponent,
+        RtreportComponent,
+        PolicyComponent,
+        AdminComponent,
+        TeamleadComponent,
+        ProfileComponent,
+    ],
+    providers: [
+        AuthGuard,
+        AlertService,
+        AuthenticationService,
+        UserService,
+        StatisticsService,
+        DailyreportService,
+        RtreportService,
+        EventService,
+        ValidateService,
+        LocationService,
+        AppConfig,
+        { provide: APP_INITIALIZER,
+            useFactory: initConfig, // And use it here
+            deps: [AppConfig],
+            multi: true
+        }
+
+    ],
+    bootstrap: [ AppComponent ]
 })
 
 export class AppModule { }
+
+export function initConfig(configApp: AppConfig) {
+    return () => configApp.load();
+}
+

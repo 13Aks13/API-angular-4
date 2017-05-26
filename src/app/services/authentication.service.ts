@@ -21,15 +21,17 @@ export class AuthenticationService {
     public token: string;
     public userRole: string;
 
-    // URL to web api
-    public domain = 'http://ws.dev/';
-    // public domain = 'http://wsapi.test-y-sbm.com/';
+    // ENV file
+    public env: string;
+    // Domain
+    public domain: string;
+
     private loginUrl = 'login';
     private usersUrl = 'users';
 
     constructor(
         private http: Http,
-        private router: Router
+        private router: Router,
     ) {
         // set token if saved in local storage
         const currentUser = JSON.parse(localStorage.getItem('currentUser'));
@@ -39,7 +41,6 @@ export class AuthenticationService {
     login(email: string, password: string) {
         const headers = new Headers({ 'Content-Type': 'x-www-form-urlencoded' });
         const options = new RequestOptions({ headers: headers });
-
         const url = `${this.domain}${this.loginUrl}`;
 
         // console.log('JSON.stringify:', JSON.stringify({ email: email, password: password }));

@@ -5,9 +5,14 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Http, Headers, RequestOptions } from '@angular/http';
-import { AuthenticationService } from '../services/authentication.service';
 import { FlashMessagesService } from 'angular2-flash-messages';
+
+
+// Service
+import { AppConfig } from '../config/app.config';
+import { AuthenticationService } from '../services/authentication.service';
 import { ValidateService } from '../services/validate.service';
+
 
 @Component({
     templateUrl: './login.component.html',
@@ -26,14 +31,25 @@ export class LoginComponent implements OnInit {
     constructor(
         private route: ActivatedRoute,
         private router: Router,
+        private appConfig: AppConfig,
         private authenticationService: AuthenticationService,
         private flashMessagesService: FlashMessagesService,
         private validateService: ValidateService,
     ) { }
 
+
+    getDomain(): string {
+        return this.appConfig.getConfig('domain');
+    }
+
     ngOnInit() {
         // reset login status
         this.authenticationService.logout();
+        this.appConfig.load().then((res) => {
+            // Set domain from config
+            this.authenticationService.domain = this.getDomain();
+            console.log(this.authenticationService.domain);
+        });
     }
 
     login() {
