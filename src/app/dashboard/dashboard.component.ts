@@ -35,12 +35,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private token: string;
     private model: EventItem[];
 
-    constructor(
-        private authenticationService: AuthenticationService,
-        private userService: UserService,
-        private statisticsService: StatisticsService,
-        private eventService: EventService
-    ) {
+    constructor(private authenticationService: AuthenticationService,
+                private userService: UserService,
+                private statisticsService: StatisticsService,
+                private eventService: EventService) {
         this.model = eventService.list();
     }
 
@@ -52,7 +50,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     // Get user by token
     getUserByToken(token: string): any {
         this.userService.getUserByToken(token)
-            .then( response => this.user = response );
+            .then(response => this.user = response);
     }
 
     // Get user statuses
@@ -95,62 +93,35 @@ export class DashboardComponent implements OnInit, OnDestroy {
             // Get current user
             this.userService.getUserByToken(this.token).then((user) => {
                 this.user = user;
-                // console.log('User' + this.user);
                 // Get user status
                 this.getCurrentUserStatus(this.token, this.user.id).then((statistics) => {
                     this.statistics = statistics;
-                    // Send status to Nav
-                    this.add(this.statistics.status_id, this.statistics.status_name);
-                    console.log('Dashboard onIni :', this.statistics.status_name);
-                    this.statisticsService.updCurrentUserStatus(this.user.id, this.statistics.status_id).then((response) => {
+                    console.log('User current status:', this.statistics);
+                    // Start interval for get data statuses
+                    this.Interval = setInterval(() => {
+                        // User statuses time
                         for (let i = 0; i < this.userstatuses.length; i++) {
                             this.getTime(this.user.id, this.userstatuses[i].status_id)
                                 .then(() => {
                                     switch (this.time.status_id) {
-                                        case 2:  this.user.today =  this.time.seconds;
+                                        case 2:
+                                            this.user.today = this.time.seconds;
                                             break;
-                                        case 3:  this.user.brake =  this.time.seconds;
+                                        case 3:
+                                            this.user.brake = this.time.seconds;
                                             break;
-                                        case 4:  this.user.lunch =  this.time.seconds;
+                                        case 4:
+                                            this.user.lunch = this.time.seconds;
                                             break;
                                     }
-                                    // console.log(this.time);
                                 });
                         }
-                    });
+                    }, 10000);
                 });
             });
-
-            // Kill Interval
-            clearInterval(this.Interval);
-            // Start update user status every X interval
-            this.Interval = setInterval(() => {
-                this.getCurrentUserStatus(this.token, this.user.id).then((statistics) => {
-                    this.statistics = statistics;
-                    this.statisticsService.updCurrentUserStatus(this.user.id, this.statistics.status_id).then((response) => {
-                        for (let i = 0; i < this.userstatuses.length; i++) {
-                            this.getTime(this.user.id, this.userstatuses[i].status_id)
-                                .then(() => {
-                                    switch (this.time.status_id) {
-                                        case 2:  this.user.today =  this.time.seconds;
-                                            break;
-                                        case 3:  this.user.brake =  this.time.seconds;
-                                            break;
-                                        case 4:  this.user.lunch =  this.time.seconds;
-                                            break;
-                                    }
-                                    // console.log(this.time);
-                                });
-                        }
-                    });
-                });
-            }, 5000);
         });
     }
 
-    ngOnDestroy() {
-        clearInterval(this.Interval);
-    }
 
     onSelect(userstatus: UserStatuses): void {
         // this.token = JSON.parse(localStorage.getItem('currentUser')).token;
@@ -164,45 +135,46 @@ export class DashboardComponent implements OnInit, OnDestroy {
             }
 
             // Set current status for user
-            this.setCurrentUserStatus(this.user.id, this.selectedStatuses.status_id).then(() => {
-                // clearInterval(this.Interval);
-                // console.log('Kill Interval');
-                this.getCurrentUserStatus(this.token, this.user.id).then(() => {
-                    // Fast filter for array
-                    const st = this.statistics.status_id;
-                    this.statistics.status_name = this.userstatuses.filter(function(obj) {
-                        return obj.status_id === st;
-                    })[0].status_name;
+            this.setCurrentUserStatus(this.user.id, this.selectedStatuses.status_id).then((statistics) => {
+                this.statistics = statistics;
+                // Fast filter for array
+                const st = this.statistics.status_id;
+                this.statistics.status_name = this.userstatuses.filter(function(obj) {
+                    return obj.status_id === st;
+                })[0].status_name;
+                // Send status to Nav
+                this.add(this.statistics.status_id, this.statistics.status_name);
+                console.log('New user status set to:', this.statistics.status_name);
+                // Start interval for get data statuses
+                this.Interval = setInterval(() => {
+                    // User statuses time
+                    for (let i = 0; i < this.userstatuses.length; i++) {
+                        this.getTime(this.user.id, this.userstatuses[i].status_id)
+                            .then(() => {
+                                switch (this.time.status_id) {
+                                    case 2:
+                                        this.user.today = this.time.seconds;
+                                        break;
+                                    case 3:
+                                        this.user.brake = this.time.seconds;
+                                        break;
+                                    case 4:
+                                        this.user.lunch = this.time.seconds;
+                                        break;
+                                }
+                            });
+                    }
+                }, 10000);
 
-                    // Send status to Nav
-                    this.add(this.statistics.status_id, this.statistics.status_name);
-                    console.log('Dashboard onSel :', this.statistics.status_name);
-                    // // Kill Interval
-                    // clearInterval(this.Interval);
-                    // // Start update user status every X interval
-                    // this.Interval = setInterval(() => {
-                    //     this.updCurrentUserStatus(this.user.id, this.statistics.status_id);
-                    //     for (let i = 0; i < this.userstatuses.length; i++) {
-                    //         this.getTime(this.user.id, this.userstatuses[i].status_id).then(() => {
-                    //             switch (this.time.status_id) {
-                    //                 case 2:
-                    //                     this.user.today = this.time.seconds;
-                    //                     break;
-                    //                 case 3:
-                    //                     this.user.brake = this.time.seconds;
-                    //                     break;
-                    //                 case 4:
-                    //                     this.user.lunch = this.time.seconds;
-                    //                     break;
-                    //             }
-                    //             // console.log(this.time);
-                    //             // console.log(this.user);
-                    //         });
-                    //     }
-                    // }, 5000);
-                });
             });
-        }
+        };
+    }
+
+    ngOnDestroy() {
+        clearInterval(this.Interval);
     }
 
 }
+
+
+

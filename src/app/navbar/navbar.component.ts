@@ -42,7 +42,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
         this.statistics.status_id = this.addedItem.id;
         this.statistics.status_name = this.addedItem.name;
         // Start global status
-        this.globalStatus(this.statistics.status_id, this.statistics.status_name);
+        // this.globalStatus(this.statistics.status_id, this.statistics.status_name);
     }
 
     // Get current user status
@@ -70,6 +70,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
             // Get current user status
             this.statisticsService.getCurrentUserStatus(this.token, this.user.id).then((statistics) => {
                 this.statistics = statistics;
+                console.log('Nav bar user status:', this.statistics);
                 // Get status name
                 this.statisticsService.getStatusName(this.token, this.statistics.status_id).then((userstatuses) => {
                     this.userstatuses = userstatuses;
@@ -79,26 +80,34 @@ export class NavbarComponent implements OnInit, OnDestroy {
         });
     }
 
-    // G(S)et user status
-    globalStatus(id, name) {
-        if ((id !== 1) && (id !== undefined)) {
-            // Kill Interval
-            clearInterval(this.Interval);
-            // Start update user status every X interval
-            this.Interval = setInterval(() => {
-                this.statisticsService.updCurrentUserStatus(this.user.id, this.statistics.status_id).then((response) => {
-                    console.log('Global status upd: ', response.seconds);
-                });
-            }, 10000);
-
-        }
-    }
-
+    // // G(S)et user status
+    // globalStatus(id, name) {
+    //     if ((id !== 1) && (id !== undefined)) {
+    //         // Kill Interval
+    //         clearInterval(this.Interval);
+    //         // Start update user status every X interval
+    //         this.Interval = setInterval(() => {
+    //             this.statisticsService.updCurrentUserStatus(this.user.id, this.statistics.status_id).then((response) => {
+    //                 console.log('Global status upd: ', response.seconds);
+    //             });
+    //         }, 10000);
+    //
+    //     }
+    // }
 
     ngOnDestroy() {
-      clearInterval(this.Interval);
-      // Send status offline to API
-      this.setCurrentUserStatus(this.user.id, 1);
+
     }
+
+    // ngOnDestroy() {
+    //     clearInterval(this.Interval);
+    //     this.statisticsService.getCurrentUserStatus(this.token, this.user.id).then((statistics) => {
+    //         this.statistics = statistics;
+    //         if (this.statistics.status_id !== 1) {
+    //             // Send status offline to API
+    //             this.setCurrentUserStatus(this.user.id, 1);
+    //         }
+    //     });
+    // }
 
 }
