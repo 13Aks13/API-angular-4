@@ -57,11 +57,19 @@ export class AuthenticationService {
         });
     }
 
-    logout(): void {
+    clear(): void {
         // clear token remove user from local storage to log user out
         this.token = null;
         this.userRole = null;
         localStorage.removeItem('currentUser');
+    }
+
+    logout(): void {
+        console.log('Logout from service');
+        // clear token remove user from local storage to log user out
+        this.clear();
+        // Redirect to login
+        this.router.navigate(['/login']);
     }
 
     setUserRole(role) {

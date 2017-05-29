@@ -9,6 +9,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FlashMessagesModule } from 'angular2-flash-messages';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { AlertModule } from 'ngx-bootstrap';
+import { DropdownModule } from "ng2-dropdown";
 
 // Services
 import { AuthGuard } from './services/auth.guard';
@@ -50,7 +51,8 @@ import { ProfileComponent } from './profile/profile.component';
         NgxDatatableModule,
         AlertModule,
         FlashMessagesModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        DropdownModule,
     ],
     declarations: [
         SafePipe,

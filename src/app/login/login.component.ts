@@ -43,8 +43,9 @@ export class LoginComponent implements OnInit {
     }
 
     ngOnInit() {
-        // reset login status
-        this.authenticationService.logout();
+        // clear token remove user from local storage to log user out
+        this.authenticationService.clear();
+
         this.appConfig.load().then((res) => {
             // Set domain from config
             this.authenticationService.domain = this.getDomain();

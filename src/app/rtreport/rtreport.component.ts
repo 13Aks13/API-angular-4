@@ -32,7 +32,7 @@ import {forEach} from "@angular/router/src/utils/collection";
   templateUrl: './rtreport.component.html',
   styleUrls: ['./rtreport.component.css']
 })
-export class RtreportComponent implements OnInit {
+export class RtreportComponent implements OnInit, OnDestroy {
 
     // URLs to web api
     private domain = this.authenticationService.domain;
@@ -166,7 +166,7 @@ export class RtreportComponent implements OnInit {
                         // console.log(results);
                         this.rows = Observable.create((subscriber) => {
                             subscriber.next(results);
-                            //subscriber.complete();
+                            // subscriber.complete();
                         });
                     });
 

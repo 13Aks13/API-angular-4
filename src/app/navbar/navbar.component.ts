@@ -2,11 +2,12 @@
  * Created by Andrew K. on 15.05.17.
  */
 
-import { Component, OnInit, OnDestroy, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 
 import { User } from '../models/user';
 import { Statistics } from '../models/statistics';
 import { UserStatuses} from '../models/userstatuses';
+import { AuthenticationService } from '../services/authentication.service';
 import { UserService } from '../services/user.service';
 import { StatisticsService } from '../services/statistics.service';
 import { EventItem, EventService } from '../services/event.service';
@@ -16,7 +17,7 @@ import { EventItem, EventService } from '../services/event.service';
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
-export class NavbarComponent implements OnInit, OnDestroy {
+export class NavbarComponent implements OnInit {
 
     user: User;
     statistics: Statistics;
@@ -29,9 +30,10 @@ export class NavbarComponent implements OnInit, OnDestroy {
     private addedItem: EventItem;
 
     constructor(
-      private userService: UserService,
-      private statisticsService: StatisticsService,
-      private eventService: EventService
+        private authenticationService: AuthenticationService,
+        private userService: UserService,
+        private statisticsService: StatisticsService,
+        private eventService: EventService
     ) {
         eventService.itemAdded$.subscribe(item => this.onItemAdded(item));
     }
@@ -70,7 +72,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
             // Get current user status
             this.statisticsService.getCurrentUserStatus(this.token, this.user.id).then((statistics) => {
                 this.statistics = statistics;
-                console.log('Nav bar user status:', this.statistics);
                 // Get status name
                 this.statisticsService.getStatusName(this.token, this.statistics.status_id).then((userstatuses) => {
                     this.userstatuses = userstatuses;
@@ -80,34 +81,23 @@ export class NavbarComponent implements OnInit, OnDestroy {
         });
     }
 
-    // // G(S)et user status
-    // globalStatus(id, name) {
-    //     if ((id !== 1) && (id !== undefined)) {
-    //         // Kill Interval
-    //         clearInterval(this.Interval);
-    //         // Start update user status every X interval
-    //         this.Interval = setInterval(() => {
-    //             this.statisticsService.updCurrentUserStatus(this.user.id, this.statistics.status_id).then((response) => {
-    //                 console.log('Global status upd: ', response.seconds);
-    //             });
-    //         }, 10000);
-    //
-    //     }
-    // }
-
-    ngOnDestroy() {
-
+    logout() {
+        console.log('Logout');
+        // Get user by token
+        this.userService.getUserByToken(this.token).then( (user) => {
+            this.user = user;
+            // Get current user status
+            this.statisticsService.getCurrentUserStatus(this.token, this.user.id).then((statistics) => {
+                this.statistics = statistics;
+                console.log(this.statistics);
+                if (this.statistics.id !== 1) {
+                    this.setCurrentUserStatus(this.user.id, 1);
+                    this.authenticationService.logout();
+                } else {
+                    this.authenticationService.logout();
+                }
+            });
+        });
     }
-
-    // ngOnDestroy() {
-    //     clearInterval(this.Interval);
-    //     this.statisticsService.getCurrentUserStatus(this.token, this.user.id).then((statistics) => {
-    //         this.statistics = statistics;
-    //         if (this.statistics.status_id !== 1) {
-    //             // Send status offline to API
-    //             this.setCurrentUserStatus(this.user.id, 1);
-    //         }
-    //     });
-    // }
 
 }

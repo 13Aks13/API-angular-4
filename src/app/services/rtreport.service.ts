@@ -8,9 +8,6 @@ import * as moment from 'moment/moment';
 // Service
 import { AuthenticationService } from './authentication.service';
 
-// Models
-import { Rtreport } from '../models/rtreport';
-
 @Injectable()
 export class RtreportService {
 
@@ -39,7 +36,6 @@ export class RtreportService {
         return this.http.get(url)
             .toPromise()
             .then(response => response)
-            // .then(response => { response.json(); console.log(response); })
             .catch(this.handleError);
     }
 

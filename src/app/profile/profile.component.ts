@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Title } from '@angular/platform-browser';
@@ -19,7 +19,8 @@ import { Location } from '../models/location';
 export class ProfileComponent implements OnInit {
 
     user: User;
-    location: Location[] = [];
+    locations: Location[] = [];
+    selectedLocation: Location;
     profileForm: FormGroup;
     ready: boolean = false;
 
@@ -32,16 +33,30 @@ export class ProfileComponent implements OnInit {
 
     ) { }
 
+    doSomeActionOnOpen() {
+
+    }
+
+    doSomeActionOnClose(location: Location) {
+        this.selectedLocation = location;
+        console.log(this.selectedLocation);
+    }
+
     ngOnInit() {
         this.userService.getUserByToken(this.authenticationService.token).then((response) => {
             this.user = response;
             this.locationService.getLocations(this.authenticationService.token).then((res) => {
-                this.location = res;
+                this.locations = res;
+                console.log(this.locations);
 
                 this.buildRegisterForm();
             });
         });
 
+    }
+
+    selectItem(value) {
+        console.log('Location:', value);
     }
 
     buildRegisterForm(): void {
@@ -65,7 +80,9 @@ export class ProfileComponent implements OnInit {
                 ],
                 'phone': [this.user.phone, []
                 ],
-                'skype': [this.user.phone, []
+                'skype': [this.user.skype, []
+                ],
+                'location': [this.user.location, []
                 ],
             }
         );

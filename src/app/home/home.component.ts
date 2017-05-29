@@ -49,18 +49,4 @@ export class HomeComponent implements OnInit {
         this.userRole = this.authenticationService.userRole;
     }
 
-
-    // ngOnDestroy() {
-    //     this.userService.getUserByToken(this.token).then( (user) => {
-    //         this.user = user;
-    //         // Get current user status
-    //         this.statisticsService.getCurrentUserStatus(this.token, this.user.id).then((statistics) => {
-    //             this.statistics = statistics;
-    //             // Send status offline to API
-    //             this.setCurrentUserStatus(this.user.id, 1);
-    //             console.log('Send status offline');
-    //         });
-    //     });
-    // }
-
 }

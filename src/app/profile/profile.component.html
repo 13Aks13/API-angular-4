@@ -41,8 +41,14 @@
         </alert>
     </div>
 
-  <button type="submit" class="btn btn-primary"
-          [disabled]="(!profileForm.valid)">
-    Save me
-  </button>
+    <div class="dropdown" dropdown [dropdownToggle]="false" (onOpen)="doSomeActionOnOpen()"
+         [class.selected]="location === selectedLocation"(onClose)="doSomeActionOnClose(location)">
+        <button class="btn btn-primary" dropdown-open>Locations</button>
+        <ul class="dropdown-menu">
+            <li *ngFor="let location of locations">{{location.title}}</li>
+        </ul>
+    </div>
+
+
+    <button type="submit" class="btn btn-primary" [disabled]="(!profileForm.valid)">Save me </button>
 </form>
