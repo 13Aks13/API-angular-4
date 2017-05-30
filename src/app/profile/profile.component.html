@@ -25,28 +25,21 @@
         </alert>
     </div>
 
-    <div class="form-group" [ngClass]="{'has-error': formErrors.phone}">
+    <div class="form-group">
         <label for="phone">Phone</label>
-        <input type="text"  id="phone" name="phone" class="form-control" placeholder="Type phone here" formControlName="phone" required>
-        <alert *ngIf="formErrors.phone" type="danger">
-            {{ formErrors.phone }}
-        </alert>
+        <input type="text"  id="phone" name="phone" class="form-control" placeholder="Type phone here" formControlName="phone">
     </div>
 
-    <div class="form-group" [ngClass]="{'has-error': formErrors.skype}">
-        <label for="skype">Phone</label>
-        <input type="text"  id="skype" name="skype" class="form-control" placeholder="Type skype here" formControlName="skype" required>
-        <alert *ngIf="formErrors.skype" type="danger">
-            {{ formErrors.skype }}
-        </alert>
+    <div class="form-group">
+        <label for="skype">Skype</label>
+        <input type="text"  id="skype" name="skype" class="form-control" placeholder="Type skype here" formControlName="skype">
     </div>
 
-    <div class="dropdown" dropdown [dropdownToggle]="false" (onOpen)="doSomeActionOnOpen()"
-         [class.selected]="location === selectedLocation"(onClose)="doSomeActionOnClose(location)">
-        <button class="btn btn-primary" dropdown-open>Locations</button>
-        <ul class="dropdown-menu">
-            <li *ngFor="let location of locations">{{location.title}}</li>
-        </ul>
+    <div class="form-group">
+        <label for="location">Location</label>
+        <select class="form-control" id="location" required [(ngModel)]="model.location" name="location" [ngModelOptions]="{standalone: true}">
+            <option *ngFor="let location of locations" [value]="location" (click)="selectItem(value)">{{location.title}}</option>
+        </select>
     </div>
 
 

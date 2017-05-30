@@ -2,14 +2,17 @@ import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Http, HttpModule } from '@angular/http';
-
-import { AppComponent } from './app.component';
-import { AppRoutingModule } from './app.routing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 import { FlashMessagesModule } from 'angular2-flash-messages';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { AlertModule } from 'ngx-bootstrap';
-import { DropdownModule } from "ng2-dropdown";
+
+import { AppComponent } from './app.component';
+import { AppRoutingModule } from './app.routing';
+
+
+
 
 // Services
 import { AuthGuard } from './services/auth.guard';
@@ -49,10 +52,9 @@ import { ProfileComponent } from './profile/profile.component';
         AppRoutingModule,
         BrowserAnimationsModule,
         NgxDatatableModule,
-        AlertModule,
+        AlertModule.forRoot(),
         FlashMessagesModule,
         ReactiveFormsModule,
-        DropdownModule,
     ],
     declarations: [
         SafePipe,
@@ -73,7 +75,6 @@ import { ProfileComponent } from './profile/profile.component';
     ],
     providers: [
         AuthGuard,
-        AlertService,
         AuthenticationService,
         UserService,
         StatisticsService,

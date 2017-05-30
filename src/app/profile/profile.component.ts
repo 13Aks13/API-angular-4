@@ -3,7 +3,6 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 
-
 import { AuthenticationService } from '../services/authentication.service';
 import { LocationService } from '../services/location.service';
 import { UserService } from '../services/user.service';
@@ -17,10 +16,9 @@ import { Location } from '../models/location';
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
-
+    model: any = {};
     user: User;
     locations: Location[] = [];
-    selectedLocation: Location;
     profileForm: FormGroup;
     ready: boolean = false;
 
@@ -31,32 +29,25 @@ export class ProfileComponent implements OnInit {
         private authenticationService: AuthenticationService,
         private userService: UserService,
 
-    ) { }
-
-    doSomeActionOnOpen() {
-
+    ) {
+        this.locationService.getLocations(this.authenticationService.token).then((res) => {
+            this.locations = res;
+        });
     }
 
-    doSomeActionOnClose(location: Location) {
-        this.selectedLocation = location;
-        console.log(this.selectedLocation);
-    }
 
     ngOnInit() {
         this.userService.getUserByToken(this.authenticationService.token).then((response) => {
             this.user = response;
-            this.locationService.getLocations(this.authenticationService.token).then((res) => {
-                this.locations = res;
-                console.log(this.locations);
-
-                this.buildRegisterForm();
-            });
+            this.titleService.setTitle('Profile');
+            this.buildRegisterForm();
         });
-
     }
 
-    selectItem(value) {
-        console.log('Location:', value);
+    selectItem(location) {
+        console.log('Location:', location);
+        this.user.location.id = location.id;
+        this.user.location.title = location.title;
     }
 
     buildRegisterForm(): void {
@@ -64,14 +55,14 @@ export class ProfileComponent implements OnInit {
             {
                 'first_name': [this.user.first_name, [
                     Validators.required,
-                    Validators.minLength(5),
-                    Validators.maxLength(10),
+                    Validators.minLength(3),
+                    Validators.maxLength(25),
                     Validators.pattern(/^[a-z0-9_]*$/i)]
                 ],
                 'last_name': [this.user.last_name, [
                     Validators.required,
-                    Validators.minLength(5),
-                    Validators.maxLength(10),
+                    Validators.minLength(3),
+                    Validators.maxLength(25),
                     Validators.pattern(/^[a-z0-9_]*$/i)]
                 ],
                 'email': [this.user.email, [
@@ -117,21 +108,19 @@ export class ProfileComponent implements OnInit {
         'first_name': '',
         'last_name': '',
         'email': '',
-        'phone': '',
-        'skype': '',
     };
 
     validationMessages = {
         'first_name': {
             'required': 'Username is required.',
-            'minlength': 'Username must be at least 5 characters long.',
-            'maxlength': 'Username cannot be more than 10 characters long.',
+            'minlength': 'Username must be at least 3 characters long.',
+            'maxlength': 'Username cannot be more than 25 characters long.',
             'pattern': 'Username can contain only letters, number and "_" symbol.'
         },
         'last_name': {
             'required': 'Username is required.',
-            'minlength': 'Username must be at least 5 characters long.',
-            'maxlength': 'Username cannot be more than 10 characters long.',
+            'minlength': 'Username must be at least 3 characters long.',
+            'maxlength': 'Username cannot be more than 25 characters long.',
             'pattern': 'Username can contain only letters, number and "_" symbol.'
         },
         'email': {

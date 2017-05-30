@@ -96,7 +96,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
                 // Get user status
                 this.getCurrentUserStatus(this.token, this.user.id).then((statistics) => {
                     this.statistics = statistics;
-                    console.log('User current status:', this.statistics);
                     // Start interval for get data statuses
                     this.Interval = setInterval(() => {
                         // User statuses time
@@ -144,7 +143,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
                 })[0].status_name;
                 // Send status to Nav
                 this.add(this.statistics.status_id, this.statistics.status_name);
-                console.log('New user status set to:', this.statistics.status_name);
                 // Start interval for get data statuses
                 this.Interval = setInterval(() => {
                     // User statuses time
