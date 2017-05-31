@@ -8,11 +8,9 @@ import { FlashMessagesModule } from 'angular2-flash-messages';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { AlertModule } from 'ngx-bootstrap';
 
+
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app.routing';
-
-
-
 
 // Services
 import { AuthGuard } from './services/auth.guard';

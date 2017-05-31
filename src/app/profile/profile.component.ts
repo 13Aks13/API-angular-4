@@ -1,7 +1,9 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Http, Headers, RequestOptions } from '@angular/http';
 import { Title } from '@angular/platform-browser';
+import { Observable } from 'rxjs/Observable';
 
 import { AuthenticationService } from '../services/authentication.service';
 import { LocationService } from '../services/location.service';
@@ -22,7 +24,12 @@ export class ProfileComponent implements OnInit {
     profileForm: FormGroup;
     ready: boolean = false;
 
+    // URLs to web api
+    private domain = this.authenticationService.domain;
+    private avatarUrl = 'avatar';
+
     constructor(
+        private http: Http,
         private titleService: Title,
         private formBuilder: FormBuilder,
         private locationService: LocationService,
@@ -44,15 +51,60 @@ export class ProfileComponent implements OnInit {
         });
     }
 
+    // Location select
     selectItem(location) {
-        console.log('Location:', location);
         this.user.location.id = location.id;
         this.user.location.title = location.title;
+    }
+
+    getBase64(file): any {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function () {
+            console.log('File on base64: ', reader.result);
+            return(reader.result);
+        };
+
+        reader.onerror = function (error) {
+            console.log('Error: ', error);
+        };
+    }
+
+    // File to upload
+    fileUpload(event) {
+        console.log(event.target.files);
+        const fileList: FileList = event.target.files;
+        if ( fileList.length > 0 ) {
+            const file: File = fileList[0];
+            // const formData: FormData = new FormData();
+            // formData.append('uploadFile', this.getBase64(file), file.name);
+            const self = this;
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = function () {
+                console.log('File on base64: ', reader.result);
+                const url = `${self.domain}/${self.avatarUrl}`;
+                const headers = new Headers({ 'Authorization': 'Bearer ' + self.authenticationService.token });
+                headers.append('Content-Type', 'multipart/form-data');
+                headers.append('Accept', 'application/json');
+                const options = new RequestOptions({ headers: headers });
+                console.log('id:', self.user.id);
+                self.http.post(url, { id: self.user.id, avatar: reader.result }, options)
+                    .map(res => res.json())
+                    .catch(error => Observable.throw(error))
+                    .subscribe(
+                        data => console.log('success'),
+                        error => console.log(error)
+                    );
+            };
+        }
     }
 
     buildRegisterForm(): void {
         this.profileForm = this.formBuilder.group(
             {
+                'avatar': [this.user.avatar, []
+                ],
                 'first_name': [this.user.first_name, [
                     Validators.required,
                     Validators.minLength(3),

@@ -1,6 +1,13 @@
 
 <form *ngIf="ready" [formGroup]="profileForm" (ngSubmit)="save(profileForm)" novalidate>
 
+<!--
+    <div class="form-control">
+        <img alt="Avatar" width="100px" higth="100px" name="avatar" class="form-control" formControlName="avatar" src="avatar">
+    </div>
+-->
+    <input type="file" (change)="fileUpload($event)" placeholder="Upload file" accept=".jpg, .png">
+
     <div class="form-group" [ngClass]="{'has-error': formErrors.first_name}">
         <label for="first_name">First name</label>
         <input type="text"  id="first_name" name="first_name" class="form-control" placeholder="Type first name here" formControlName="first_name" required>
@@ -37,11 +44,11 @@
 
     <div class="form-group">
         <label for="location">Location</label>
-        <select class="form-control" id="location" required [(ngModel)]="model.location" name="location" [ngModelOptions]="{standalone: true}">
-            <option *ngFor="let location of locations" [value]="location" (click)="selectItem(value)">{{location.title}}</option>
+        <select formControlName="location" id="location" name="location">
+            <option *ngFor="let location of locations" [ngValue]="location">{{location.title}}</option>
         </select>
     </div>
 
 
-    <button type="submit" class="btn btn-primary" [disabled]="(!profileForm.valid)">Save me </button>
+    <button type="submit" class="btn btn-primary" [disabled]="(!profileForm.valid)">Save me</button>
 </form>
