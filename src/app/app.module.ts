@@ -8,13 +8,13 @@ import { FlashMessagesModule } from 'angular2-flash-messages';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { AlertModule } from 'ngx-bootstrap';
 
-
+// App Component
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app.routing';
 
 // Services
 import { AuthGuard } from './services/auth.guard';
-import { AlertService } from './services/alert.service';
+import { AuthenticationService } from './services/authentication.service';
 import { UserService } from './services/user.service';
 import { StatisticsService } from './services/statistics.service';
 import { DailyreportService } from './services/dailyreport.service';
@@ -28,7 +28,6 @@ import { AppConfig } from './config/app.config';
 import { AlertComponent } from './alert/alert.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
-import { AuthenticationService } from './services/authentication.service';
 import { HomeComponent } from './home/home.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { NavbarComponent } from './navbar/navbar.component';

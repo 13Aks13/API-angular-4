@@ -46,6 +46,9 @@ export class ProfileComponent implements OnInit {
     ngOnInit() {
         this.userService.getUserByToken(this.authenticationService.token).then((response) => {
             this.user = response;
+            if (this.user.avatar) {
+                this.model.avatar = this.user.avatar;
+            }
             this.titleService.setTitle('Profile');
             this.buildRegisterForm();
         });
@@ -85,8 +88,8 @@ export class ProfileComponent implements OnInit {
                 console.log('File on base64: ', reader.result);
                 const url = `${self.domain}/${self.avatarUrl}`;
                 const headers = new Headers({ 'Authorization': 'Bearer ' + self.authenticationService.token });
-                headers.append('Content-Type', 'multipart/form-data');
-                headers.append('Accept', 'application/json');
+                // headers.append('Content-Type', 'multipart/form-data');
+                // headers.append('Accept', 'application/json');
                 const options = new RequestOptions({ headers: headers });
                 console.log('id:', self.user.id);
                 self.http.post(url, { id: self.user.id, avatar: reader.result }, options)
@@ -120,6 +123,8 @@ export class ProfileComponent implements OnInit {
                 'email': [this.user.email, [
                     Validators.required,
                     Validators.email       ]
+                ],
+                'birthday': [this.user.birthday, []
                 ],
                 'phone': [this.user.phone, []
                 ],

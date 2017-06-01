@@ -1,11 +1,9 @@
 
+<img alt="Avatar" [(ngModel)]="avatar" width="150px" hight="150px" name="avatar" src="{{model.avatar}}">
+
 <form *ngIf="ready" [formGroup]="profileForm" (ngSubmit)="save(profileForm)" novalidate>
 
-<!--
-    <div class="form-control">
-        <img alt="Avatar" width="100px" higth="100px" name="avatar" class="form-control" formControlName="avatar" src="avatar">
-    </div>
--->
+
     <input type="file" (change)="fileUpload($event)" placeholder="Upload file" accept=".jpg, .png">
 
     <div class="form-group" [ngClass]="{'has-error': formErrors.first_name}">
